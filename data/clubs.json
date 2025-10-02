@@ -4,7 +4,7 @@
         "name": "Galatasaray",
         "stadium": "Rams Park",
         "foundedYear": 1905,
-        "logoUrl": "https://images.seeklogo.com/logo-png/61/1/galatasaray-5-yildizli-logo-png_seeklogo-617686.png",
+        "logoUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/galatasaray-5-yildizli-logo-png_seeklogo-617686.png",
         "coach": "Okan Buruk",
         "country": "Turkey"
     },
@@ -13,7 +13,7 @@
         "name": "Liverpool",
         "stadium": "Anfield",
         "foundedYear": 1892,
-        "logoUrl": "https://upload.wikimedia.org/wikipedia/sco/thumb/0/0c/Liverpool_FC.svg/370px-Liverpool_FC.svg.png?20170428000634",
+        "logoUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/Liverpool_FC.svg.png",
         "coach": "Arne Slot",
         "country": "England"
     }
