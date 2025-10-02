@@ -1,0 +1,296 @@
+[
+    {
+        "id": "GS-001",
+        "name": "Victor Osimhen",
+        "description": "A powerful Nigerian striker known for speed, aerial ability, and clinical finishing.",
+        "age": 24,
+        "isBasisspeler": true,
+        "birthDate": "1998-12-29",
+        "imageUrl": "https://assets.sorare.com/playerpicture/9076681b-de86-41f4-ba9d-2d6591de05aa/picture/squared-db0a41fdd352948cd1ecae42d1019913.png",
+        "rugnummer": 45,
+        "position": "Striker",
+        "positionType": "FWD",
+        "skills": [
+            "Finishing",
+            "Pace",
+            "Heading"
+        ],
+        "club": {
+            "id": "CLUB-001",
+            "name": "Galatasaray"
+        }
+    },
+    {
+        "id": "GS-002",
+        "name": "Yunus Akgün",
+        "description": "Turkish winger with pace and dribbling, academy product of Galatasaray.",
+        "age": 23,
+        "isBasisspeler": false,
+        "birthDate": "2000-07-07",
+        "imageUrl": "https://cdn.resfu.com/img_data/players/medium/343318.jpg?size=340x&lossy=1",
+        "rugnummer": 11,
+        "position": "Right Winger",
+        "positionType": "FWD",
+        "skills": [
+            "Pace",
+            "Dribbling",
+            "Acceleration"
+        ],
+        "club": {
+            "id": "CLUB-001",
+            "name": "Galatasaray"
+        }
+    },
+    {
+        "id": "GS-003",
+        "name": "Barış Alper Yılmaz",
+        "description": "Versatile Turkish forward who can play across the front line.",
+        "age": 23,
+        "isBasisspeler": true,
+        "birthDate": "2000-05-23",
+        "imageUrl": "https://img.uefa.com/imgml/TP/players/1/2026/324x324/250158929.jpg",
+        "rugnummer": 53,
+        "position": "Left Winger",
+        "positionType": "FWD",
+        "skills": [
+            "Pace",
+            "Strength",
+            "Work Rate"
+        ],
+        "club": {
+            "id": "CLUB-001",
+            "name": "Galatasaray"
+        }
+    },
+    {
+        "id": "GS-004",
+        "name": "Lucas Torreira",
+        "description": "Uruguayan ball-winning midfielder with high stamina.",
+        "age": 27,
+        "isBasisspeler": true,
+        "birthDate": "1996-02-11",
+        "imageUrl": "https://img.uefa.com/imgml/TP/players/1/2026/cutoff/250118286.webp",
+        "rugnummer": 34,
+        "position": "Midfielder",
+        "positionType": "MID",
+        "skills": [
+            "Tackling",
+            "Work Rate",
+            "Ball Recovery"
+        ],
+        "club": {
+            "id": "CLUB-001",
+            "name": "Galatasaray"
+        }
+    },
+    {
+        "id": "GS-005",
+        "name": "Wilfried Singo",
+        "description": "Ivorian right-back noted for pace and physicality.",
+        "age": 22,
+        "isBasisspeler": true,
+        "birthDate": "2000-12-25",
+        "imageUrl": "https://hlkiurt3.rocketcdn.com/profiles/0d9b6c615131487f995e23eacce13196.jpeg",
+        "rugnummer": 90,
+        "position": "Right Back",
+        "positionType": "DEF",
+        "skills": [
+            "Pace",
+            "Strength",
+            "Crossing"
+        ],
+        "club": {
+            "id": "CLUB-001",
+            "name": "Galatasaray"
+        }
+    },
+    {
+        "id": "GS-006",
+        "name": "Davinson Sánchez",
+        "description": "Colombian centre-back strong in duels and aerials.",
+        "age": 27,
+        "isBasisspeler": true,
+        "birthDate": "1996-06-12",
+        "imageUrl": "https://img.uefa.com/imgml/TP/players/1/2026/cutoff/250099374.webp",
+        "rugnummer": 6,
+        "position": "Centre Back",
+        "positionType": "DEF",
+        "skills": [
+            "Tackling",
+            "Heading",
+            "Strength"
+        ],
+        "club": {
+            "id": "CLUB-001",
+            "name": "Galatasaray"
+        }
+    },
+    {
+        "id": "GS-007",
+        "name": "Uğurcan Çakır",
+        "description": "Turkish goalkeeper known for quick reflexes and leadership.",
+        "age": 27,
+        "isBasisspeler": true,
+        "birthDate": "1996-03-05",
+        "imageUrl": "https://img.uefa.com/imgml/TP/players/1/2026/cutoff/250078452.webp",
+        "rugnummer": 1,
+        "position": "Goalkeeper",
+        "positionType": "GK",
+        "skills": [
+            "Reflexes",
+            "Shot Stopping",
+            "Leadership"
+        ],
+        "club": {
+            "id": "CLUB-001",
+            "name": "Galatasaray"
+        }
+    },
+    {
+        "id": "LFC-001",
+        "name": "Hugo Ekitike",
+        "description": "French striker with smart movement and finishing.",
+        "age": 21,
+        "isBasisspeler": false,
+        "birthDate": "2002-06-20",
+        "imageUrl": "https://img.uefa.com/imgml/TP/players/1/2026/cutoff/250144643.webp",
+        "rugnummer": 22,
+        "position": "Striker",
+        "positionType": "FWD",
+        "skills": [
+            "Finishing",
+            "Movement",
+            "Pace"
+        ],
+        "club": {
+            "id": "CLUB-002",
+            "name": "Liverpool"
+        }
+    },
+    {
+        "id": "LFC-002",
+        "name": "Mohamed Salah",
+        "description": "Egyptian winger famous for pace, dribbling, and a lethal left foot.",
+        "age": 31,
+        "isBasisspeler": true,
+        "birthDate": "1992-06-15",
+        "imageUrl": "https://example.com/images/players/salah.jpg",
+        "rugnummer": 11,
+        "position": "Right Winger",
+        "positionType": "FWD",
+        "skills": [
+            "Dribbling",
+            "Finishing",
+            "Pace"
+        ],
+        "club": {
+            "id": "CLUB-002",
+            "name": "Liverpool"
+        }
+    },
+    {
+        "id": "LFC-003",
+        "name": "Florian Wirtz",
+        "description": "German attacking midfielder with creativity and close control.",
+        "age": 20,
+        "isBasisspeler": true,
+        "birthDate": "2003-05-03",
+        "imageUrl": "https://img.uefa.com/imgml/TP/players/1/2026/cutoff/250139445.webp",
+        "rugnummer": 7,
+        "position": "Attacking Midfielder",
+        "positionType": "MID",
+        "skills": [
+            "Creativity",
+            "Passing",
+            "Dribbling"
+        ],
+        "club": {
+            "id": "CLUB-002",
+            "name": "Liverpool"
+        }
+    },
+    {
+        "id": "LFC-004",
+        "name": "Ryan Gravenberch",
+        "description": "Dutch midfielder with strong physique and passing range.",
+        "age": 21,
+        "isBasisspeler": false,
+        "birthDate": "2002-05-16",
+        "imageUrl": "https://img.uefa.com/imgml/TP/players/1/2026/cutoff/250113001.webp",
+        "rugnummer": 38,
+        "position": "Midfielder",
+        "positionType": "MID",
+        "skills": [
+            "Passing",
+            "Dribbling",
+            "Physicality"
+        ],
+        "club": {
+            "id": "CLUB-002",
+            "name": "Liverpool"
+        }
+    },
+    {
+        "id": "LFC-005",
+        "name": "Virgil van Dijk",
+        "description": "Elite centre-back and Liverpool captain.",
+        "age": 32,
+        "isBasisspeler": true,
+        "birthDate": "1991-07-08",
+        "imageUrl": "https://img.uefa.com/imgml/TP/players/1/2026/cutoff/250113001.webp",
+        "rugnummer": 4,
+        "position": "Centre Back",
+        "positionType": "DEF",
+        "skills": [
+            "Tackling",
+            "Leadership",
+            "Aerial Ability"
+        ],
+        "club": {
+            "id": "CLUB-002",
+            "name": "Liverpool"
+        }
+    },
+    {
+        "id": "LFC-006",
+        "name": "Ibrahima Konaté",
+        "description": "French centre-back with strength and composure.",
+        "age": 24,
+        "isBasisspeler": true,
+        "birthDate": "1999-05-25",
+        "imageUrl": "https://img.uefa.com/imgml/TP/players/1/2026/cutoff/250091013.webp",
+        "rugnummer": 5,
+        "position": "Centre Back",
+        "positionType": "DEF",
+        "skills": [
+            "Strength",
+            "Tackling",
+            "Positioning"
+        ],
+        "club": {
+            "id": "CLUB-002",
+            "name": "Liverpool"
+        }
+    },
+    {
+        "id": "LFC-007",
+        "name": "Alisson Becker",
+        "description": "Brazilian goalkeeper known for elite reflexes and distribution.",
+        "age": 31,
+        "isBasisspeler": true,
+        "birthDate": "1992-10-02",
+        "imageUrl": "https://img.uefa.com/imgml/TP/players/1/2026/cutoff/250099867.webp",
+        "rugnummer": 1,
+        "position": "Goalkeeper",
+        "positionType": "GK",
+        "skills": [
+            "Reflexes",
+            "Distribution",
+            "Composure"
+        ],
+        "club": {
+            "id": "CLUB-002",
+            "name": "Liverpool"
+        }
+    }
+]

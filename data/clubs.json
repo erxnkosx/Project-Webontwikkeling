@@ -1,0 +1,20 @@
+[
+    {
+        "id": "CLUB-001",
+        "name": "Galatasaray",
+        "stadium": "Rams Park",
+        "foundedYear": 1905,
+        "logoUrl": "https://images.seeklogo.com/logo-png/61/1/galatasaray-5-yildizli-logo-png_seeklogo-617686.png",
+        "coach": "Okan Buruk",
+        "country": "Turkey"
+    },
+    {
+        "id": "CLUB-002",
+        "name": "Liverpool",
+        "stadium": "Anfield",
+        "foundedYear": 1892,
+        "logoUrl": "https://upload.wikimedia.org/wikipedia/sco/thumb/0/0c/Liverpool_FC.svg/370px-Liverpool_FC.svg.png?20170428000634",
+        "coach": "Arne Slot",
+        "country": "England"
+    }
+]
