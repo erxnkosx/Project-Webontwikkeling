@@ -4,17 +4,17 @@
         "name": "Galatasaray",
         "stadium": "Rams Park",
         "foundedYear": 1905,
-        "logoUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/galatasaray-5-yildizli-logo-png_seeklogo-617686.png",
+        "logoUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/GS/galatasaray-5-yildizli-logo-png_seeklogo-617686.png",
         "coach": "Okan Buruk",
         "country": "Turkey"
     },
     {
         "id": "CLUB-002",
-        "name": "Liverpool",
-        "stadium": "Anfield",
-        "foundedYear": 1892,
-        "logoUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/Liverpool_FC.svg.png",
-        "coach": "Arne Slot",
+        "name": "Fenerbahçe",
+        "stadium": "Şükrü Saracoğlu Stadion",
+        "foundedYear": 1907,
+        "logoUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/FB/fener.jpg",
+        "coach": "José Mourinho",
         "country": "England"
     }
 ]

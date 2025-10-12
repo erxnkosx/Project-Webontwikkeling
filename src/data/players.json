@@ -6,7 +6,7 @@
         "age": 24,
         "isBasisspeler": true,
         "birthDate": "1998-12-29",
-        "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/osimhen.png",
+        "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/GS/osimhen.png",
         "rugnummer": 45,
         "position": "Striker",
         "positionType": "FWD",
@@ -27,7 +27,7 @@
         "age": 23,
         "isBasisspeler": false,
         "birthDate": "2000-07-07",
-        "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/yunus%20akgun.jpg",
+        "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/GS/yunus%20akgun.jpg",
         "rugnummer": 11,
         "position": "Right Winger",
         "positionType": "FWD",
@@ -48,7 +48,7 @@
         "age": 23,
         "isBasisspeler": true,
         "birthDate": "2000-05-23",
-        "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/baris%20alper.jpg",
+        "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/GS/baris%20alper.jpg",
         "rugnummer": 53,
         "position": "Left Winger",
         "positionType": "FWD",
@@ -69,7 +69,7 @@
         "age": 27,
         "isBasisspeler": true,
         "birthDate": "1996-02-11",
-        "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/torreira.webp",
+        "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/GS/torreira.webp",
         "rugnummer": 34,
         "position": "Midfielder",
         "positionType": "MID",
@@ -90,7 +90,7 @@
         "age": 22,
         "isBasisspeler": true,
         "birthDate": "2000-12-25",
-        "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/singo.jpeg",
+        "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/GS/singo.jpeg",
         "rugnummer": 90,
         "position": "Right Back",
         "positionType": "DEF",
@@ -111,7 +111,7 @@
         "age": 27,
         "isBasisspeler": true,
         "birthDate": "1996-06-12",
-        "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/davinson.webp",
+        "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/GS/davinson.webp",
         "rugnummer": 6,
         "position": "Centre Back",
         "positionType": "DEF",
@@ -132,7 +132,7 @@
         "age": 27,
         "isBasisspeler": true,
         "birthDate": "1996-03-05",
-        "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/ugurcan.webp",
+        "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/GS/ugurcan.webp",
         "rugnummer": 1,
         "position": "Goalkeeper",
         "positionType": "GK",
@@ -146,151 +146,105 @@
             "name": "Galatasaray"
         }
     },
-    {
-        "id": "LFC-001",
-        "name": "Hugo Ekitike",
-        "description": "French striker with smart movement and finishing.",
-        "age": 21,
-        "isBasisspeler": false,
-        "birthDate": "2002-06-20",
-        "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/ekitike.webp",
-        "rugnummer": 22,
-        "position": "Striker",
-        "positionType": "FWD",
-        "skills": [
-            "Finishing",
-            "Movement",
-            "Pace"
-        ],
-        "club": {
-            "id": "CLUB-002",
-            "name": "Liverpool"
-        }
-    },
-    {
-        "id": "LFC-002",
-        "name": "Mohamed Salah",
-        "description": "Egyptian winger famous for pace, dribbling, and a lethal left foot.",
-        "age": 31,
-        "isBasisspeler": true,
-        "birthDate": "1992-06-15",
-        "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/salah.webp",
-        "rugnummer": 11,
-        "position": "Right Winger",
-        "positionType": "FWD",
-        "skills": [
-            "Dribbling",
-            "Finishing",
-            "Pace"
-        ],
-        "club": {
-            "id": "CLUB-002",
-            "name": "Liverpool"
-        }
-    },
-    {
-        "id": "LFC-003",
-        "name": "Florian Wirtz",
-        "description": "German attacking midfielder with creativity and close control.",
-        "age": 20,
-        "isBasisspeler": true,
-        "birthDate": "2003-05-03",
-        "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/wirtz.webp",
-        "rugnummer": 7,
-        "position": "Attacking Midfielder",
-        "positionType": "MID",
-        "skills": [
-            "Creativity",
-            "Passing",
-            "Dribbling"
-        ],
-        "club": {
-            "id": "CLUB-002",
-            "name": "Liverpool"
-        }
-    },
-    {
-        "id": "LFC-004",
-        "name": "Ryan Gravenberch",
-        "description": "Dutch midfielder with strong physique and passing range.",
-        "age": 21,
-        "isBasisspeler": false,
-        "birthDate": "2002-05-16",
-        "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/gravenberch.webp",
-        "rugnummer": 38,
-        "position": "Midfielder",
-        "positionType": "MID",
-        "skills": [
-            "Passing",
-            "Dribbling",
-            "Physicality"
-        ],
-        "club": {
-            "id": "CLUB-002",
-            "name": "Liverpool"
-        }
-    },
-    {
-        "id": "LFC-005",
-        "name": "Virgil van Dijk",
-        "description": "Elite centre-back and Liverpool captain.",
-        "age": 32,
-        "isBasisspeler": true,
-        "birthDate": "1991-07-08",
-        "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/vandijk.webp",
-        "rugnummer": 4,
-        "position": "Centre Back",
-        "positionType": "DEF",
-        "skills": [
-            "Tackling",
-            "Leadership",
-            "Aerial Ability"
-        ],
-        "club": {
-            "id": "CLUB-002",
-            "name": "Liverpool"
-        }
-    },
-    {
-        "id": "LFC-006",
-        "name": "Ibrahima Konaté",
-        "description": "French centre-back with strength and composure.",
-        "age": 24,
-        "isBasisspeler": true,
-        "birthDate": "1999-05-25",
-        "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/konate.webp",
-        "rugnummer": 5,
-        "position": "Centre Back",
-        "positionType": "DEF",
-        "skills": [
-            "Strength",
-            "Tackling",
-            "Positioning"
-        ],
-        "club": {
-            "id": "CLUB-002",
-            "name": "Liverpool"
-        }
-    },
-    {
-        "id": "LFC-007",
-        "name": "Alisson Becker",
-        "description": "Brazilian goalkeeper known for elite reflexes and distribution.",
-        "age": 31,
-        "isBasisspeler": true,
-        "birthDate": "1992-10-02",
-        "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/allison.webp",
-        "rugnummer": 1,
-        "position": "Goalkeeper",
-        "positionType": "GK",
-        "skills": [
-            "Reflexes",
-            "Distribution",
-            "Composure"
-        ],
-        "club": {
-            "id": "CLUB-002",
-            "name": "Liverpool"
-        }
-    }
+    [
+  {
+    "id": "FB-001",
+    "name": "Muhammed Kerem Aktürkoğlu",
+    "description": "Turkish winger known for acceleration, 1v1 dribbling and work rate.",
+    "age": 26,
+    "isBasisspeler": true,
+    "birthDate": "1998-10-21",
+    "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/FB/kerem.jpg",
+    "rugnummer": 9,
+    "position": "Left/Right Winger",
+    "positionType": "FWD",
+    "skills": ["Pace", "Dribbling", "Off-ball Movement"],
+    "club": { "id": "CLUB-002", "name": "Fenerbahçe" }
+  },
+  {
+    "id": "FB-002",
+    "name": "Ederson Moraes",
+    "description": "Brazilian goalkeeper with outstanding distribution and reflexes.",
+    "age": 31,
+    "isBasisspeler": true,
+    "birthDate": "1993-08-17",
+    "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/FB/ederson.jpg",
+    "rugnummer": 31,
+    "position": "Goalkeeper",
+    "positionType": "GK",
+    "skills": ["Distribution", "Reflexes", "Sweeper Keeper"],
+    "club": { "id": "CLUB-002", "name": "Fenerbahçe" }
+  },
+  {
+    "id": "FB-003",
+    "name": "Jhon Durán",
+    "description": "Colombian striker with power, pace and direct runs in behind.",
+    "age": 21,
+    "isBasisspeler": false,
+    "birthDate": "2003-12-13",
+    "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/FB/john_duran.jpg",
+    "rugnummer": 10,
+    "position": "Striker",
+    "positionType": "FWD",
+    "skills": ["Finishing", "Pace", "Strength"],
+    "club": { "id": "CLUB-002", "name": "Fenerbahçe" }
+  },
+  {
+    "id": "FB-004",
+    "name": "Marco Asensio",
+    "description": "Spanish attacker/midfielder with vision and a strong left-footed shot.",
+    "age": 29,
+    "isBasisspeler": true,
+    "birthDate": "1996-01-21",
+    "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/FB/asensio.jpg",
+    "rugnummer": 21,
+    "position": "Attacking Midfielder / Right Winger",
+    "positionType": "MID",
+    "skills": ["Creativity", "Long Shots", "First Touch"],
+    "club": { "id": "CLUB-002", "name": "Fenerbahçe" }
+  },
+  {
+    "id": "FB-005",
+    "name": "Nélson Semedo",
+    "description": "Portuguese right-back; quick, direct and reliable in 1v1s.",
+    "age": 31,
+    "isBasisspeler": true,
+    "birthDate": "1993-11-16",
+    "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/FB/semedo.jpg",
+    "rugnummer": 27,
+    "position": "Right Back",
+    "positionType": "DEF",
+    "skills": ["Pace", "Dribbling", "Defending"],
+    "club": { "id": "CLUB-002", "name": "Fenerbahçe" }
+  },
+  {
+    "id": "FB-006",
+    "name": "Anderson Talisca",
+    "description": "Brazilian attacking midfielder; tall, technical and a threat from range.",
+    "age": 31,
+    "isBasisspeler": true,
+    "birthDate": "1994-02-01",
+    "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/FB/talisca.jpg",
+    "rugnummer": 94,
+    "position": "Attacking Midfielder",
+    "positionType": "MID",
+    "skills": ["Long Shots", "Technique", "Set Pieces"],
+    "club": { "id": "CLUB-002", "name": "Fenerbahçe" }
+  },
+  {
+    "id": "FB-007",
+    "name": "Milan Škriniar",
+    "description": "Slovak centre-back; strong in duels, positioning and leadership.",
+    "age": 30,
+    "isBasisspeler": true,
+    "birthDate": "1995-02-11",
+    "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/FB/skriniar.jpg",
+    "rugnummer": 37,
+    "position": "Centre Back",
+    "positionType": "DEF",
+    "skills": ["Tackling", "Positioning", "Aerial Ability"],
+    "club": { "id": "CLUB-002", "name": "Fenerbahçe" }
+  }
+]
+
 ]
