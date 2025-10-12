@@ -2,8 +2,8 @@ import * as fs from "fs";
 import { createInterface } from "readline/promises";
 import { stdin as input, stdout as output } from "process";
 
-// JSON inlezen (simpel: relatieve paden vanaf projectroot)
-const players = JSON.parse(fs.readFileSync("src/data/players.json", "utf-8"));
+const playersData = JSON.parse(fs.readFileSync("src/data/players.json", "utf-8"));
+const players: any[] = Array.isArray(playersData) ? playersData.flat() : [];
 const clubs   = JSON.parse(fs.readFileSync("src/data/clubs.json",   "utf-8"));
 
 const rl = createInterface({ input, output });
