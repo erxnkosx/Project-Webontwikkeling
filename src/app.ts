@@ -4,7 +4,7 @@ import { stdin as input, stdout as output } from "process";
 
 const playersData = JSON.parse(fs.readFileSync("src/data/players.json", "utf-8"));
 const players: any[] = Array.isArray(playersData) ? playersData.flat() : [];
-const clubs   = JSON.parse(fs.readFileSync("src/data/clubs.json",   "utf-8"));
+const clubs = JSON.parse(fs.readFileSync("src/data/clubs.json", "utf-8"));
 
 const rl = createInterface({ input, output });
 
@@ -34,18 +34,37 @@ async function main() {
         const p = players.find((x: any) => String(x.id).toLowerCase() === id.toLowerCase());
         if (p) {
           const skills = (p.skills || []).join(", ");
-          const club   = p.club || { name: "", id: "" };
+          const clubRef = p.club || { name: "", id: "" };
 
           console.log(`- ${p.name} (${p.id})`);
           console.log(`  - Description: ${p.description}`);
           console.log(`  - Age: ${p.age}`);
-          console.log(`  - Active: ${p.isBasisspeler}`);
+          console.log(`  - Basisspeler: ${p.isBasisspeler}`);
           console.log(`  - Birthdate: ${p.birthDate}`);
           console.log(`  - Image: ${p.imageUrl}`);
           console.log(`  - Position: ${p.position}`);
           console.log(`  - PositionType: ${p.positionType}`);
-          console.log("  - Skills: " + skills);
-          console.log("  - Club: " + club.name + " (" + club.id + ")\n");
+          console.log(`  - Skills: ${skills}`);
+          console.log(`  - Club: ${clubRef.name} (${clubRef.id})`);
+
+          const clubInfo = clubs.find(
+            (c: any) =>
+              String(c.id).toLowerCase() === String(clubRef.id).toLowerCase() ||
+              String(c.name).toLowerCase() === String(clubRef.name).toLowerCase()
+          );
+
+          if (clubInfo) {
+            console.log("  - Club info:");
+            console.log(`        • Stadium: ${clubInfo.stadium}`);
+            console.log(`        • Founded Year: ${clubInfo.foundedYear}`);
+            console.log(`        • Coach: ${clubInfo.coach}`);
+            console.log(`        • Country: ${clubInfo.country}`);
+            console.log(`        • Logo: ${clubInfo.logoUrl}`);
+          } else {
+            console.log("  - Club info: not found");
+          }
+
+          console.log(); 
           break;
         }
 

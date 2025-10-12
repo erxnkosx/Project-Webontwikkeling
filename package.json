@@ -4,9 +4,9 @@
   "description": "Projectopdracht",
   "main": "index.js",
   "scripts": {
-  "start": "ts-node src/app.ts",
-  "build": "tsc",
-  "start:js": "node dist/app.js"
+    "start": "ts-node src/app.ts",
+    "build": "tsc",
+    "start:js": "node dist/app.js"
   },
   "repository": {
     "type": "git",
