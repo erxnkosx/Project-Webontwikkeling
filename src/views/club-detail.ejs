@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title><%= club.name %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="navbar">
+        <div class="navbar-title">Football Admin</div>
+        <nav class="nav-links">
+          <a href="/">Home</a>
+          <a href="/players">Players</a>
+          <a href="/clubs">Clubs</a>
+        </nav>
+      </header>
+
+      <div class="card">
+        <div class="detail-layout">
+          <div>
+            <img
+              src="<%= club.logoUrl %>"
+              alt="<%= club.name %>"
+              class="detail-image"
+            />
+          </div>
+
+          <div>
+            <h1 class="detail-title"><%= club.name %></h1>
+            <ul class="detail-list">
+              <li><strong>Stadium:</strong> <%= club.stadium %></li>
+              <li><strong>Founded:</strong> <%= club.foundedYear %></li>
+              <li><strong>Coach:</strong> <%= club.coach %></li>
+              <li><strong>Country:</strong> <%= club.country %></li>
+              <li>
+                <strong>Total squad market value:</strong>
+                € <%= formatMarketValue(totalMarketValueEur) %>
+              </li>
+            </ul>
+
+            <h2 class="detail-section-title">Players in this club</h2>
+
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Position</th>
+                    <th>Basisspeler</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% clubPlayers.forEach(p => { %>
+                  <tr>
+                    <td><%= p.name %></td>
+                    <td><%= p.position %></td>
+                    <td>
+                      <% if (p.isBasisspeler) { %>
+                        <span class="badge badge-yes">Yes</span>
+                      <% } else { %>
+                        <span class="badge badge-no">No</span>
+                      <% } %>
+                    </td>
+                    <td>
+                      <a class="btn-link" href="/players/<%= p.id %>">View</a>
+                    </td>
+                  </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+
+            <p style="margin-top: 16px;">
+              <a class="btn-link" href="/clubs">&larr; Back to clubs</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

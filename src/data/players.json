@@ -15,6 +15,9 @@
             "Pace",
             "Heading"
         ],
+        "heightCm": 185,
+        "weightKg": 78,
+        "marketValueEur": 75000000,
         "club": {
             "id": "CLUB-001",
             "name": "Galatasaray"
@@ -36,6 +39,9 @@
             "Dribbling",
             "Acceleration"
         ],
+        "heightCm": 173,
+        "weightKg": 65,
+        "marketValueEur": 15000000,
         "club": {
             "id": "CLUB-001",
             "name": "Galatasaray"
@@ -57,6 +63,9 @@
             "Strength",
             "Work Rate"
         ],
+        "heightCm": 186,
+        "weightKg": 75,
+        "marketValueEur": 25000000,
         "club": {
             "id": "CLUB-001",
             "name": "Galatasaray"
@@ -78,6 +87,9 @@
             "Work Rate",
             "Ball Recovery"
         ],
+        "heightCm": 166,
+        "weightKg": 60,
+        "marketValueEur": 13000000,
         "club": {
             "id": "CLUB-001",
             "name": "Galatasaray"
@@ -99,6 +111,9 @@
             "Strength",
             "Crossing"
         ],
+        "heightCm": 190,
+        "weightKg": 79,
+        "marketValueEur": 28000000,
         "club": {
             "id": "CLUB-001",
             "name": "Galatasaray"
@@ -120,6 +135,9 @@
             "Heading",
             "Strength"
         ],
+        "heightCm": 187,
+        "weightKg": 81,
+        "marketValueEur": 20000000,
         "club": {
             "id": "CLUB-001",
             "name": "Galatasaray"
@@ -141,112 +159,180 @@
             "Shot Stopping",
             "Leadership"
         ],
+        "heightCm": 191,
+        "weightKg": 78,
+        "marketValueEur": 15000000,
         "club": {
             "id": "CLUB-001",
             "name": "Galatasaray"
         }
     },
-    [
-
     {
-    "id": "FB-001",
-    "name": "Jhon Durán",
-    "description": "Colombian striker with power, pace and direct runs in behind.",
-    "age": 21,
-    "isBasisspeler": false,
-    "birthDate": "2003-12-13",
-    "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/FB/john_duran.jpg",
-    "rugnummer": 10,
-    "position": "Striker",
-    "positionType": "FWD",
-    "skills": ["Finishing", "Pace", "Strength"],
-    "club": { "id": "CLUB-002", "name": "Fenerbahçe" }
-  },
-  {
-    "id": "FB-002",
-    "name": "Muhammed Kerem Aktürkoğlu",
-    "description": "Turkish winger known for acceleration, 1v1 dribbling and work rate.",
-    "age": 26,
-    "isBasisspeler": true,
-    "birthDate": "1998-10-21",
-    "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/FB/kerem.jpg",
-    "rugnummer": 9,
-    "position": "Left/Right Winger",
-    "positionType": "FWD",
-    "skills": ["Pace", "Dribbling", "Off-ball Movement"],
-    "club": { "id": "CLUB-002", "name": "Fenerbahçe" }
-  },
-  {
-    "id": "FB-003",
-    "name": "Marco Asensio",
-    "description": "Spanish attacker/midfielder with vision and a strong left-footed shot.",
-    "age": 29,
-    "isBasisspeler": true,
-    "birthDate": "1996-01-21",
-    "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/FB/asensio.jpg",
-    "rugnummer": 21,
-    "position": "Attacking Midfielder / Right Winger",
-    "positionType": "MID",
-    "skills": ["Creativity", "Long Shots", "First Touch"],
-    "club": { "id": "CLUB-002", "name": "Fenerbahçe" }
-  },
-  {
-    "id": "FB-004",
-    "name": "Anderson Talisca",
-    "description": "Brazilian attacking midfielder; tall, technical and a threat from range.",
-    "age": 31,
-    "isBasisspeler": true,
-    "birthDate": "1994-02-01",
-    "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/FB/talisca.jpg",
-    "rugnummer": 94,
-    "position": "Attacking Midfielder",
-    "positionType": "MID",
-    "skills": ["Long Shots", "Technique", "Set Pieces"],
-    "club": { "id": "CLUB-002", "name": "Fenerbahçe" }
-  },
+        "id": "FB-001",
+        "name": "Jhon Durán",
+        "description": "Colombian striker with power, pace and direct runs in behind.",
+        "age": 21,
+        "isBasisspeler": false,
+        "birthDate": "2003-12-13",
+        "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/FB/john_duran.jpg",
+        "rugnummer": 10,
+        "position": "Striker",
+        "positionType": "FWD",
+        "skills": [
+            "Finishing",
+            "Pace",
+            "Strength"
+        ],
+        "heightCm": 185,
+        "weightKg": 73,
+        "marketValueEur": 35000000,
+        "club": {
+            "id": "CLUB-002",
+            "name": "Fenerbahçe"
+        }
+    },
     {
-    "id": "FB-005",
-    "name": "Nélson Semedo",
-    "description": "Portuguese right-back; quick, direct and reliable in 1v1s.",
-    "age": 31,
-    "isBasisspeler": true,
-    "birthDate": "1993-11-16",
-    "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/FB/semedo.jpg",
-    "rugnummer": 27,
-    "position": "Right Back",
-    "positionType": "DEF",
-    "skills": ["Pace", "Dribbling", "Defending"],
-    "club": { "id": "CLUB-002", "name": "Fenerbahçe" }
-  },
+        "id": "FB-002",
+        "name": "Muhammed Kerem Aktürkoğlu",
+        "description": "Turkish winger known for acceleration, 1v1 dribbling and work rate.",
+        "age": 26,
+        "isBasisspeler": true,
+        "birthDate": "1998-10-21",
+        "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/FB/kerem.jpg",
+        "rugnummer": 9,
+        "position": "Left/Right Winger",
+        "positionType": "FWD",
+        "skills": [
+            "Pace",
+            "Dribbling",
+            "Off-ball Movement"
+        ],
+        "heightCm": 173,
+        "weightKg": 68,
+        "marketValueEur": 23000000,
+        "club": {
+            "id": "CLUB-002",
+            "name": "Fenerbahçe"
+        }
+    },
     {
-    "id": "FB-006",
-    "name": "Milan Škriniar",
-    "description": "Slovak centre-back; strong in duels, positioning and leadership.",
-    "age": 30,
-    "isBasisspeler": true,
-    "birthDate": "1995-02-11",
-    "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/FB/skriniar.jpg",
-    "rugnummer": 37,
-    "position": "Centre Back",
-    "positionType": "DEF",
-    "skills": ["Tackling", "Positioning", "Aerial Ability"],
-    "club": { "id": "CLUB-002", "name": "Fenerbahçe" }
-  },
+        "id": "FB-003",
+        "name": "Marco Asensio",
+        "description": "Spanish attacker/midfielder with vision and a strong left-footed shot.",
+        "age": 29,
+        "isBasisspeler": true,
+        "birthDate": "1996-01-21",
+        "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/FB/asensio.jpg",
+        "rugnummer": 21,
+        "position": "Attacking Midfielder / Right Winger",
+        "positionType": "MID",
+        "skills": [
+            "Creativity",
+            "Long Shots",
+            "First Touch"
+        ],
+        "heightCm": 182,
+        "weightKg": 76,
+        "marketValueEur": 17000000,
+        "club": {
+            "id": "CLUB-002",
+            "name": "Fenerbahçe"
+        }
+    },
     {
-    "id": "FB-007",
-    "name": "Ederson Moraes",
-    "description": "Brazilian goalkeeper with outstanding distribution and reflexes.",
-    "age": 31,
-    "isBasisspeler": true,
-    "birthDate": "1993-08-17",
-    "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/FB/ederson.jpg",
-    "rugnummer": 31,
-    "position": "Goalkeeper",
-    "positionType": "GK",
-    "skills": ["Distribution", "Reflexes", "Sweeper Keeper"],
-    "club": { "id": "CLUB-002", "name": "Fenerbahçe" }
-  }
-
-]
-
+        "id": "FB-004",
+        "name": "Anderson Talisca",
+        "description": "Brazilian attacking midfielder; tall, technical and a threat from range.",
+        "age": 31,
+        "isBasisspeler": true,
+        "birthDate": "1994-02-01",
+        "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/FB/talisca.jpg",
+        "rugnummer": 94,
+        "position": "Attacking Midfielder",
+        "positionType": "MID",
+        "skills": [
+            "Long Shots",
+            "Technique",
+            "Set Pieces"
+        ],
+        "heightCm": 190,
+        "weightKg": 72,
+        "marketValueEur": 8000000,
+        "club": {
+            "id": "CLUB-002",
+            "name": "Fenerbahçe"
+        }
+    },
+    {
+        "id": "FB-005",
+        "name": "Nélson Semedo",
+        "description": "Portuguese right-back; quick, direct and reliable in 1v1s.",
+        "age": 31,
+        "isBasisspeler": true,
+        "birthDate": "1993-11-16",
+        "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/FB/semedo.jpg",
+        "rugnummer": 27,
+        "position": "Right Back",
+        "positionType": "DEF",
+        "skills": [
+            "Pace",
+            "Dribbling",
+            "Defending"
+        ],
+        "heightCm": 177,
+        "weightKg": 67,
+        "marketValueEur": 8000000,
+        "club": {
+            "id": "CLUB-002",
+            "name": "Fenerbahçe"
+        }
+    },
+    {
+        "id": "FB-006",
+        "name": "Milan Škriniar",
+        "description": "Slovak centre-back; strong in duels, positioning and leadership.",
+        "age": 30,
+        "isBasisspeler": true,
+        "birthDate": "1995-02-11",
+        "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/FB/skriniar.jpg",
+        "rugnummer": 37,
+        "position": "Centre Back",
+        "positionType": "DEF",
+        "skills": [
+            "Tackling",
+            "Positioning",
+            "Aerial Ability"
+        ],
+        "heightCm": 188,
+        "weightKg": 80,
+        "marketValueEur": 12000000,
+        "club": {
+            "id": "CLUB-002",
+            "name": "Fenerbahçe"
+        }
+    },
+    {
+        "id": "FB-007",
+        "name": "Ederson Moraes",
+        "description": "Brazilian goalkeeper with outstanding distribution and reflexes.",
+        "age": 31,
+        "isBasisspeler": true,
+        "birthDate": "1993-08-17",
+        "imageUrl": "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/images/FB/ederson.jpg",
+        "rugnummer": 31,
+        "position": "Goalkeeper",
+        "positionType": "GK",
+        "skills": [
+            "Distribution",
+            "Reflexes",
+            "Sweeper Keeper"
+        ],
+        "heightCm": 188,
+        "weightKg": 86,
+        "marketValueEur": 18000000,
+        "club": {
+            "id": "CLUB-002",
+            "name": "Fenerbahçe"
+        }
+    }
 ]

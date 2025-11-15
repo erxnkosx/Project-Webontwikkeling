@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title><%= player.name %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="navbar">
+        <div class="navbar-title">Football Admin</div>
+        <nav class="nav-links">
+          <a href="/">Home</a>
+          <a href="/players">Players</a>
+          <a href="/clubs">Clubs</a>
+        </nav>
+      </header>
+
+      <div class="card">
+        <div class="detail-layout">
+          <div>
+            <img
+              src="<%= player.imageUrl %>"
+              alt="<%= player.name %>"
+              class="detail-image"
+            />
+          </div>
+
+          <div>
+            <h1 class="detail-title"><%= player.name %></h1>
+            <ul class="detail-list">
+              <li><strong>ID:</strong> <%= player.id %></li>
+              <li><strong>Description:</strong> <%= player.description %></li>
+              <li><strong>Age:</strong> <%= player.age %></li>
+              <li><strong>Basisspeler:</strong> <%= player.isBasisspeler ? "Yes" : "No" %></li>
+              <li><strong>Birthdate:</strong> <%= player.birthDate %></li>
+              <li><strong>Rugnummer:</strong> <%= player.rugnummer %></li>
+              <li><strong>Position:</strong> <%= player.position %> (<%= player.positionType %>)</li>
+              <li><strong>Skills:</strong> <%= player.skills.join(", ") %></li>
+              <li><strong>Height:</strong> <%= player.heightCm %> cm</li>
+              <li><strong>Weight:</strong> <%= player.weightKg %> kg</li>
+              <li><strong>Market value:</strong> € <%= formatMarketValue(player.marketValueEur) %></li>
+            </ul>
+
+            <% if (club) { %>
+              <h2 class="detail-section-title">Club</h2>
+              <p>
+                <a class="btn-link" href="/clubs/<%= club.id %>"><strong><%= club.name %></strong></a><br />
+                Stadium: <%= club.stadium %><br />
+                Founded: <%= club.foundedYear %><br />
+                Coach: <%= club.coach %><br />
+                Country: <%= club.country %>
+              </p>
+            <% } %>
+
+            <p style="margin-top: 16px;">
+              <a class="btn-link" href="/players">&larr; Back to list</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,4 +1,9 @@
-export type PositionType = 'GK' | 'DEF' | 'MID' | 'FWD';
+export type PositionType = "GK" | "DEF" | "MID" | "FWD";
+
+export interface PlayerClubRef {
+    id: string;
+    name: string;
+}
 
 export interface Player {
     id: string;
@@ -12,8 +17,10 @@ export interface Player {
     position: string;
     positionType: PositionType;
     skills: string[];
-    club: {
-        id: string;
-        name: string;
-    };
+
+    heightCm: number;
+    weightKg: number;
+    marketValueEur: number;
+
+    club: PlayerClubRef;
 }
