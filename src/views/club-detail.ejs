@@ -1,84 +1,82 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title><%= club.name %></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="/css/style.css" />
-  </head>
-  <body>
-    <div class="page">
-      <header class="navbar">
-        <div class="navbar-title">Football Admin</div>
-        <nav class="nav-links">
-          <a href="/">Home</a>
-          <a href="/players">Players</a>
-          <a href="/clubs">Clubs</a>
-        </nav>
-      </header>
+<%- include('partials/header', { title: club.name, page: 'clubs' }) %>
 
-      <div class="card">
-        <div class="detail-layout">
-          <div>
-            <img
-              src="<%= club.logoUrl %>"
-              alt="<%= club.name %>"
-              class="detail-image"
-            />
-          </div>
+<section class="club-detail-card">
+  <div class="club-hero">
+    <div class="club-hero-logo-wrap">
+      <img src="<%= club.logoUrl %>" alt="<%= club.name %>" class="detail-image" />
+    </div>
 
-          <div>
-            <h1 class="detail-title"><%= club.name %></h1>
-            <ul class="detail-list">
-              <li><strong>Stadium:</strong> <%= club.stadium %></li>
-              <li><strong>Founded:</strong> <%= club.foundedYear %></li>
-              <li><strong>Coach:</strong> <%= club.coach %></li>
-              <li><strong>Country:</strong> <%= club.country %></li>
-              <li>
-                <strong>Total squad market value:</strong>
-                € <%= formatMarketValue(totalMarketValueEur) %>
-              </li>
-            </ul>
+    <div class="club-hero-content">
+      <h1 class="club-detail-title"><%= club.name %></h1>
 
-            <h2 class="detail-section-title">Players in this club</h2>
+      <p class="club-detail-meta">
+        <span><%= club.country %></span>
+        <span class="dot">•</span>
+        <span>Founded <%= club.foundedYear %></span>
+      </p>
 
-            <div class="table-wrapper">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Position</th>
-                    <th>Basisspeler</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% clubPlayers.forEach(p => { %>
-                  <tr>
-                    <td><%= p.name %></td>
-                    <td><%= p.position %></td>
-                    <td>
-                      <% if (p.isBasisspeler) { %>
-                        <span class="badge badge-yes">Yes</span>
-                      <% } else { %>
-                        <span class="badge badge-no">No</span>
-                      <% } %>
-                    </td>
-                    <td>
-                      <a class="btn-link" href="/players/<%= p.id %>">View</a>
-                    </td>
-                  </tr>
-                  <% }) %>
-                </tbody>
-              </table>
-            </div>
-
-            <p style="margin-top: 16px;">
-              <a class="btn-link" href="/clubs">&larr; Back to clubs</a>
-            </p>
-          </div>
-        </div>
+      <div class="club-chip-row">
+        <span class="club-chip">
+          <span class="chip-label">Stadium</span>
+          <span class="chip-value"><%= club.stadium %></span>
+        </span>
+        <span class="club-chip">
+          <span class="chip-label">Coach</span>
+          <span class="chip-value"><%= club.coach %></span>
+        </span>
+        <span class="club-chip">
+          <span class="chip-label">Total market value</span>
+          <span class="chip-value">
+            € <%= formatMarketValue(totalMarketValueEur) %>
+          </span>
+        </span>
       </div>
     </div>
-  </body>
-</html>
+  </div>
+
+  <div class="club-players-section">
+    <h2 class="detail-section-title">Players in this club</h2>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Position</th>
+            <th>Starter</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% clubPlayers.forEach(p => { %>
+            <tr>
+              <td>
+                <div class="player-cell">
+                  <img src="<%= p.imageUrl %>" alt="<%= p.name %>" class="player-avatar" />
+                  <span class="player-name"><%= p.name %></span>
+                </div>
+              </td>
+              <td><%= p.position %></td>
+              <td>
+                <% if (p.isStarter) { %>
+                  <span class="badge badge-yes">Yes</span>
+                <% } else { %>
+                  <span class="badge badge-no">No</span>
+                <% } %>
+              </td>
+              <td>
+                <a class="btn-link" href="/players/<%= p.id %>">View</a>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="profile-footer">
+    <a class="btn-link" href="/clubs">&larr; Back to clubs</a>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

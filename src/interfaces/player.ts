@@ -10,7 +10,7 @@ export interface Player {
     name: string;
     description: string;
     age: number;
-    isBasisspeler: boolean;
+    isStarter: boolean;
     birthDate: string;
     imageUrl: string;
     rugnummer: number;

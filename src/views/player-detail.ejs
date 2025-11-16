@@ -1,65 +1,118 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title><%= player.name %></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="/css/style.css" />
-  </head>
-  <body>
-    <div class="page">
-      <header class="navbar">
-        <div class="navbar-title">Football Admin</div>
-        <nav class="nav-links">
-          <a href="/">Home</a>
-          <a href="/players">Players</a>
-          <a href="/clubs">Clubs</a>
-        </nav>
-      </header>
+<%- include('partials/header', { title: player.name, page: 'players' }) %>
 
-      <div class="card">
-        <div class="detail-layout">
-          <div>
-            <img
-              src="<%= player.imageUrl %>"
-              alt="<%= player.name %>"
-              class="detail-image"
-            />
-          </div>
+<section class="profile-card">
+  <div class="profile-header">
+    <img src="<%= player.imageUrl %>" alt="<%= player.name %>" class="profile-avatar" />
 
-          <div>
-            <h1 class="detail-title"><%= player.name %></h1>
-            <ul class="detail-list">
-              <li><strong>ID:</strong> <%= player.id %></li>
-              <li><strong>Description:</strong> <%= player.description %></li>
-              <li><strong>Age:</strong> <%= player.age %></li>
-              <li><strong>Basisspeler:</strong> <%= player.isBasisspeler ? "Yes" : "No" %></li>
-              <li><strong>Birthdate:</strong> <%= player.birthDate %></li>
-              <li><strong>Rugnummer:</strong> <%= player.rugnummer %></li>
-              <li><strong>Position:</strong> <%= player.position %> (<%= player.positionType %>)</li>
-              <li><strong>Skills:</strong> <%= player.skills.join(", ") %></li>
-              <li><strong>Height:</strong> <%= player.heightCm %> cm</li>
-              <li><strong>Weight:</strong> <%= player.weightKg %> kg</li>
-              <li><strong>Market value:</strong> € <%= formatMarketValue(player.marketValueEur) %></li>
-            </ul>
+    <h1 class="profile-name"><%= player.name %></h1>
 
-            <% if (club) { %>
-              <h2 class="detail-section-title">Club</h2>
-              <p>
-                <a class="btn-link" href="/clubs/<%= club.id %>"><strong><%= club.name %></strong></a><br />
-                Stadium: <%= club.stadium %><br />
-                Founded: <%= club.foundedYear %><br />
-                Coach: <%= club.coach %><br />
-                Country: <%= club.country %>
-              </p>
-            <% } %>
+    <p class="profile-subtitle">
+      <span><%= player.position %></span>
+      <% if (player.club?.name) { %>
+        ·
+        <a class="profile-club-link" href="/clubs/<%= club?.id %>">
+          <%= player.club.name %>
+        </a>
+      <% } %>
+    </p>
 
-            <p style="margin-top: 16px;">
-              <a class="btn-link" href="/players">&larr; Back to list</a>
+    <div class="profile-tags">
+      <span class="meta-chip">
+        <span class="meta-label">Age</span>
+        <span class="meta-value"><%= player.age %></span>
+      </span>
+      <span class="meta-chip">
+        <span class="meta-label">Nr</span>
+        <span class="meta-value"><%= player.rugnummer %></span>
+      </span>
+      <span class="meta-chip">
+        <span class="meta-label">Type</span>
+        <span class="meta-value"><%= player.positionType %></span>
+      </span>
+      <span class="meta-chip">
+        <span class="meta-label">Market value</span>
+        <span class="meta-value">
+          € <%= formatMarketValue(player.marketValueEur) %>
+        </span>
+      </span>
+    </div>
+  </div>
+
+  <div class="profile-grid">
+    <div class="profile-card-item">
+      <span class="stat-label">ID</span>
+      <span class="stat-value"><%= player.id %></span>
+    </div>
+    <div class="profile-card-item">
+      <span class="stat-label">Position</span>
+      <span class="stat-value"><%= player.position %></span>
+    </div>
+    <div class="profile-card-item">
+      <span class="stat-label">Birthdate</span>
+      <span class="stat-value"><%= player.birthDate %></span>
+    </div>
+    <div class="profile-card-item">
+      <span class="stat-label">Height</span>
+      <span class="stat-value"><%= player.heightCm %> cm</span>
+    </div>
+    <div class="profile-card-item">
+      <span class="stat-label">Weight</span>
+      <span class="stat-value"><%= player.weightKg %> kg</span>
+    </div>
+    <div class="profile-card-item">
+      <span class="stat-label">Starter</span>
+      <span class="stat-value">
+        <% if (player.isStarter) { %>
+          <span class="badge badge-yes">Yes</span>
+        <% } else { %>
+          <span class="badge badge-no">No</span>
+        <% } %>
+      </span>
+    </div>
+  </div>
+
+  <div class="profile-section">
+    <h2>Description</h2>
+    <p><%= player.description %></p>
+  </div>
+
+  <div class="profile-section">
+    <h2>Skills</h2>
+    <div class="skill-chips">
+      <% player.skills.forEach(s => { %>
+        <span class="skill-chip"><%= s %></span>
+      <% }) %>
+    </div>
+  </div>
+
+  <% if (club) { %>
+    <div class="profile-section">
+      <h2>Club</h2>
+      <div class="club-card">
+        <div class="club-card-header">
+          <img src="<%= club.logoUrl %>" class="club-logo" alt="<%= club.name %>" />
+          <div class="club-card-text">
+            <a class="club-name-link" href="/clubs/<%= club.id %>">
+              <%= club.name %>
+            </a>
+            <p class="club-meta">
+              <span class="club-country"><%= club.country %></span>
+              &nbsp;&nbsp;•&nbsp;&nbsp;
+              <span class="club-founded">Founded <%= club.foundedYear %></span>
             </p>
           </div>
         </div>
+        <div class="club-card-body">
+          <p><strong>Stadium:</strong> <%= club.stadium %></p>
+          <p><strong>Coach:</strong> <%= club.coach %></p>
+        </div>
       </div>
     </div>
-  </body>
-</html>
+  <% } %>
+
+  <div class="profile-footer">
+    <a class="btn-link" href="/players">&larr; Back to list</a>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
