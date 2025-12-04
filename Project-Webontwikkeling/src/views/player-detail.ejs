@@ -1,0 +1,118 @@
+<%- include('partials/header', { title: player.name, page: 'players' }) %>
+
+<section class="profile-card">
+  <div class="profile-header">
+    <img src="<%= player.imageUrl %>" alt="<%= player.name %>" class="profile-avatar" />
+
+    <h1 class="profile-name"><%= player.name %></h1>
+
+    <p class="profile-subtitle">
+      <span><%= player.position %></span>
+      <% if (player.club?.name) { %>
+        ·
+        <a class="profile-club-link" href="/clubs/<%= club?.id %>">
+          <%= player.club.name %>
+        </a>
+      <% } %>
+    </p>
+
+    <div class="profile-tags">
+      <span class="meta-chip">
+        <span class="meta-label">Age</span>
+        <span class="meta-value"><%= player.age %></span>
+      </span>
+      <span class="meta-chip">
+        <span class="meta-label">Nr</span>
+        <span class="meta-value"><%= player.rugnummer %></span>
+      </span>
+      <span class="meta-chip">
+        <span class="meta-label">Type</span>
+        <span class="meta-value"><%= player.positionType %></span>
+      </span>
+      <span class="meta-chip">
+        <span class="meta-label">Market value</span>
+        <span class="meta-value">
+          € <%= formatMarketValue(player.marketValueEur) %>
+        </span>
+      </span>
+    </div>
+  </div>
+
+  <div class="profile-grid">
+    <div class="profile-card-item">
+      <span class="stat-label">ID</span>
+      <span class="stat-value"><%= player.id %></span>
+    </div>
+    <div class="profile-card-item">
+      <span class="stat-label">Position</span>
+      <span class="stat-value"><%= player.position %></span>
+    </div>
+    <div class="profile-card-item">
+      <span class="stat-label">Birthdate</span>
+      <span class="stat-value"><%= player.birthDate %></span>
+    </div>
+    <div class="profile-card-item">
+      <span class="stat-label">Height</span>
+      <span class="stat-value"><%= player.heightCm %> cm</span>
+    </div>
+    <div class="profile-card-item">
+      <span class="stat-label">Weight</span>
+      <span class="stat-value"><%= player.weightKg %> kg</span>
+    </div>
+    <div class="profile-card-item">
+      <span class="stat-label">Starter</span>
+      <span class="stat-value">
+        <% if (player.isStarter) { %>
+          <span class="badge badge-yes">Yes</span>
+        <% } else { %>
+          <span class="badge badge-no">No</span>
+        <% } %>
+      </span>
+    </div>
+  </div>
+
+  <div class="profile-section">
+    <h2>Description</h2>
+    <p><%= player.description %></p>
+  </div>
+
+  <div class="profile-section">
+    <h2>Skills</h2>
+    <div class="skill-chips">
+      <% player.skills.forEach(s => { %>
+        <span class="skill-chip"><%= s %></span>
+      <% }) %>
+    </div>
+  </div>
+
+  <% if (club) { %>
+    <div class="profile-section">
+      <h2>Club</h2>
+      <div class="club-card">
+        <div class="club-card-header">
+          <img src="<%= club.logoUrl %>" class="club-logo" alt="<%= club.name %>" />
+          <div class="club-card-text">
+            <a class="club-name-link" href="/clubs/<%= club.id %>">
+              <%= club.name %>
+            </a>
+            <p class="club-meta">
+              <span class="club-country"><%= club.country %></span>
+              &nbsp;&nbsp;•&nbsp;&nbsp;
+              <span class="club-founded">Founded <%= club.foundedYear %></span>
+            </p>
+          </div>
+        </div>
+        <div class="club-card-body">
+          <p><strong>Stadium:</strong> <%= club.stadium %></p>
+          <p><strong>Coach:</strong> <%= club.coach %></p>
+        </div>
+      </div>
+    </div>
+  <% } %>
+
+  <div class="profile-footer">
+    <a class="btn-link" href="/players">&larr; Back to list</a>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

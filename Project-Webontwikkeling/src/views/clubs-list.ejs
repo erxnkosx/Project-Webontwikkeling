@@ -1,0 +1,88 @@
+<%- include('partials/header', { title: 'Clubs', page: 'clubs' }) %>
+
+<h1>Clubs</h1>
+
+<div class="card">
+  <form method="get" action="/clubs" class="search-bar">
+    <input
+      type="text"
+      name="q"
+      placeholder="Search by club name"
+      value="<%= q %>"
+    />
+    <button type="submit">Search</button>
+    <button type="button" class="filter-toggle" id="toggle-club-filter">
+      Filter
+    </button>
+  </form>
+
+  <form
+    method="get"
+    action="/clubs"
+    class="filter-panel"
+    id="club-filter-panel"
+  >
+    <input type="hidden" name="q" value="<%= q %>" />
+
+    <label>
+      Sort by:
+      <select name="sort">
+        <option value="name"        <%= sort === 'name'        ? 'selected' : '' %>>Name</option>
+        <option value="foundedYear" <%= sort === 'foundedYear' ? 'selected' : '' %>>Founded</option>
+        <option value="country"     <%= sort === 'country'     ? 'selected' : '' %>>Country</option>
+        <option value="stadium"     <%= sort === 'stadium'     ? 'selected' : '' %>>Stadium</option>
+      </select>
+    </label>
+
+    <label>
+      Order:
+      <select name="order">
+        <option value="asc"  <%= order === 'asc'  ? 'selected' : '' %>>Ascending</option>
+        <option value="desc" <%= order === 'desc' ? 'selected' : '' %>>Descending</option>
+      </select>
+    </label>
+
+    <button type="submit" class="btn-apply">Apply</button>
+  </form>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Club</th>
+          <th>Stadium</th>
+          <th>Founded</th>
+          <th>Country</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% clubs.forEach(c => { %>
+          <tr>
+            <td>
+              <div class="player-cell">
+                <img src="<%= c.logoUrl %>" alt="<%= c.name %>" class="player-avatar" />
+                <span class="player-name"><%= c.name %></span>
+              </div>
+            </td>
+            <td><%= c.stadium %></td>
+            <td><%= c.foundedYear %></td>
+            <td><%= c.country %></td>
+            <td><a class="btn-link" href="/clubs/<%= c.id %>">View</a></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  (() => {
+    const toggle = document.getElementById("toggle-club-filter");
+    const panel = document.getElementById("club-filter-panel");
+    if (!toggle || !panel) return;
+    toggle.addEventListener("click", () => panel.classList.toggle("open"));
+  })();
+</script>
+
+<%- include('partials/footer') %>
