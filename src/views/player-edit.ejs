@@ -1,0 +1,55 @@
+<%- include('partials/header', { title: 'Edit ' + player.name, page: 'players' }) %>
+
+<div class="edit-card">
+
+    <h1 class="edit-title">Edit <%= player.name %></h1>
+
+    <form method="post" action="/players/<%= player.id %>/edit" class="edit-form">
+
+        <div class="form-row">
+            <label>Name</label>
+            <input type="text" name="name" value="<%= player.name %>" required />
+        </div>
+
+        <div class="form-row">
+            <label>Age</label>
+            <input type="number" name="age" value="<%= player.age %>" required />
+        </div>
+
+        <div class="form-row">
+            <label>Position</label>
+            <input type="text" name="position" value="<%= player.position %>" required />
+        </div>
+
+        <div class="form-row">
+            <label>Market Value (€)</label>
+            <input type="number" name="marketValueEur" value="<%= player.marketValueEur %>" required />
+        </div>
+
+        <div class="form-row">
+            <label>Club</label>
+            <select name="clubId" required>
+                <% clubs.forEach(c => { %>
+                    <option value="<%= c.id %>" <%= c.id === player.club.id ? "selected" : "" %>>
+                        <%= c.name %>
+                    </option>
+                <% }) %>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <label>Starter</label>
+            <select name="isStarter">
+                <option value="true"  <%= player.isStarter ? "selected" : "" %>>Yes</option>
+                <option value="false" <%= !player.isStarter ? "selected" : "" %>>No</option>
+            </select>
+        </div>
+
+        <button class="btn-save" type="submit">Save changes</button>
+        <a href="/players/<%= player.id %>" class="btn-cancel">Cancel</a>
+
+    </form>
+
+</div>
+
+<%- include('partials/footer') %>

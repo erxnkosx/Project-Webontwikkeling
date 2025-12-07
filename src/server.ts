@@ -12,6 +12,7 @@ function formatMarketValue(value: number): string {
     return value.toString();
 }
 
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.set("views", "src/views");
@@ -168,6 +169,50 @@ app.get("/players/:id", async (req, res) => {
 
     res.render("player-detail", { player, club, formatMarketValue });
 });
+
+app.get("/players/:id/edit", async (req, res) => {
+    await loadData();
+
+    const id = req.params.id;
+    const player = playersCache.find(p => p.id === id);
+
+    if (!player) return res.status(404).send("Player not found");
+
+    res.render("player-edit", {
+        player,
+        clubs: clubsCache
+    });
+});
+
+app.post("/players/:id/edit", async (req, res) => {
+    const id = req.params.id;
+
+    const club = clubsCache.find(c => c.id === req.body.clubId);
+    if (!club) return res.status(400).send("Invalid club");
+
+    await playersCol.updateOne(
+        { id },
+        {
+            $set: {
+                name: req.body.name,
+                age: Number(req.body.age),
+                position: req.body.position,
+                marketValueEur: Number(req.body.marketValueEur),
+                isStarter: req.body.isStarter === "true",
+                club: {
+                    id: club.id,
+                    name: club.name
+                }
+            }
+        }
+    );
+
+    playersCache = await playersCol.find().toArray();
+
+    res.redirect(`/players/${id}`);
+});
+
+
 
 app.get("/clubs", async (req, res) => {
     await loadData();
