@@ -1,3 +1,10 @@
     </div>
+    <% if (user) { %>
+  <form action="/logout" method="POST" class="floating-logout">
+    <button type="submit" title="Logout">
+      ⎋ Logout
+    </button>
+  </form>
+<% } %>
   </body>
 </html>

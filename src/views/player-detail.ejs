@@ -1,7 +1,10 @@
 <%- include('partials/header', { title: player.name, page: 'players' }) %>
 
 <section class="profile-card">
-  <a href="/players/<%= player.id %>/edit" class="edit-btn">Edit info</a>
+  <% if (user?.role === "ADMIN") { %>
+  <a href="/players/<%= player.id %>/edit" class="edit-btn">Edit</a>
+  <% } %>
+
 
 
   <div class="profile-header">

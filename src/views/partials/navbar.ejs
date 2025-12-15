@@ -1,8 +1,20 @@
 <header class="navbar">
-  <div class="navbar-title">Hey Eren!</div>
+  <div class="navbar-title">
+    <% if (user) { %>
+      👋 Welkom <strong><%= user.username %></strong>
+    <% } else { %>
+      TransferMarkt
+    <% } %>
+  </div>
+
   <nav class="nav-links">
-    <a href="/"        class="<%= page === 'home'    ? 'nav-active' : '' %>">Home</a>
-    <a href="/players" class="<%= page === 'players' ? 'nav-active' : '' %>">Players</a>
-    <a href="/clubs"   class="<%= page === 'clubs'   ? 'nav-active' : '' %>">Clubs</a>
+    <% if (user) { %>
+      <a href="/dashboard">Home</a>
+      <a href="/players">Players</a>
+      <a href="/clubs">Clubs</a>
+    <% } else { %>
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+    <% } %>
   </nav>
 </header>

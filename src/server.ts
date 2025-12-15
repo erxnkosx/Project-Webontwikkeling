@@ -1,321 +1,386 @@
 import express from "express";
 import { MongoClient, Db, Collection } from "mongodb";
+import fs from "fs";
+import session from "express-session";
+import MongoStore from "connect-mongo";
+import bcrypt from "bcrypt";
+import mongoose from "mongoose";
+
 import { Player } from "./interfaces/player";
 import { Club } from "./interfaces/club";
-import fs from "fs";
+import { User } from "./models/User";
+import { seedDefaultUsers } from "./seed/seedUsers";
+import { requireAuth, requireAdmin, requireGuest } from "./middleware/auth";
 
 const app = express();
+const PORT = 3000;
+
+/* --------------------------------------------------
+   Helpers
+-------------------------------------------------- */
 
 function formatMarketValue(value: number): string {
-    if (value >= 1_000_000) return `${Math.round(value / 1_000_000)} million`;
-    if (value >= 1_000) return `${Math.round(value / 1_000)} k`;
-    return value.toString();
+  if (value >= 1_000_000) return `${Math.round(value / 1_000_000)} million`;
+  if (value >= 1_000) return `${Math.round(value / 1_000)} k`;
+  return value.toString();
 }
+
+/* --------------------------------------------------
+   App config
+-------------------------------------------------- */
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
+
 app.set("view engine", "ejs");
 app.set("views", "src/views");
 
-const url = "mongodb+srv://user:user1905@projecttransfermarkt.d6wldo9.mongodb.net/?appName=ProjectTransfermarkt";
-const client = new MongoClient(url);
+/* --------------------------------------------------
+   MongoDB config
+-------------------------------------------------- */
+
+const MONGO_URI =
+  process.env.MONGO_URI ||
+  "mongodb+srv://user:user1905@projecttransfermarkt.d6wldo9.mongodb.net/?appName=ProjectTransfermarkt";
+
+const client = new MongoClient(MONGO_URI);
 
 let db: Db;
 let playersCol: Collection<Player>;
 let clubsCol: Collection<Club>;
 
-async function seedDatabase() {
-    if ((await playersCol.countDocuments()) === 0) {
-        const seedPlayers = JSON.parse(
-            fs.readFileSync("src/data/players.json", "utf8")
-        );
-        await playersCol.insertMany(seedPlayers);
-        console.log("Seeded players collection");
-    }
+/* --------------------------------------------------
+   Sessions (MOET vóór routes)
+-------------------------------------------------- */
 
-    if ((await clubsCol.countDocuments()) === 0) {
-        const seedClubs = JSON.parse(
-            fs.readFileSync("src/data/clubs.json", "utf8")
-        );
-        await clubsCol.insertMany(seedClubs);
-        console.log("Seeded clubs collection");
-    }
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "dev-secret",
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: MONGO_URI,
+      collectionName: "sessions",
+    }),
+    cookie: {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24,
+    },
+  })
+);
+
+/* --------------------------------------------------
+   res.locals (user beschikbaar in alle views)
+-------------------------------------------------- */
+
+app.use((req, res, next) => {
+  res.locals.user = req.session.user;
+  next();
+});
+
+/* --------------------------------------------------
+   Seed players & clubs
+-------------------------------------------------- */
+
+async function seedDatabase() {
+  if ((await playersCol.countDocuments()) === 0) {
+    const players = JSON.parse(
+      fs.readFileSync("src/data/players.json", "utf8")
+    );
+    await playersCol.insertMany(players);
+    console.log("Players seeded");
+  }
+
+  if ((await clubsCol.countDocuments()) === 0) {
+    const clubs = JSON.parse(
+      fs.readFileSync("src/data/clubs.json", "utf8")
+    );
+    await clubsCol.insertMany(clubs);
+    console.log("Clubs seeded");
+  }
 }
+
+/* --------------------------------------------------
+   Cache
+-------------------------------------------------- */
 
 let playersCache: Player[] = [];
 let clubsCache: Club[] = [];
 
 async function loadData() {
-    if (!playersCache.length) {
-        playersCache = await playersCol.find().toArray();
-    }
-    if (!clubsCache.length) {
-        clubsCache = await clubsCol.find().toArray();
-    }
+  if (!playersCache.length) {
+    playersCache = await playersCol.find().toArray();
+  }
+  if (!clubsCache.length) {
+    clubsCache = await clubsCol.find().toArray();
+  }
 }
 
-app.get("/", async (req, res) => {
-    await loadData();
+/* --------------------------------------------------
+   Home / Dashboard
+-------------------------------------------------- */
 
-    const totalPlayers = playersCache.length;
-    const totalClubs = clubsCache.length;
+app.get("/", (req, res) => {
+  if (!req.session.user) {
+    return res.redirect("/login");
+  }
+  res.redirect("/dashboard");
+});
 
-    const totalMarketValueEur = playersCache.reduce(
-        (sum, p) => sum + (p.marketValueEur ?? 0),
-        0
+app.get("/dashboard", requireAuth, async (req, res) => {
+  await loadData();
+
+  res.render("home", {
+    page: "home",
+    totalPlayers: playersCache.length,
+    totalClubs: clubsCache.length,
+    totalMarketValueEur: playersCache.reduce(
+      (s, p) => s + (p.marketValueEur ?? 0),
+      0
+    ),
+    formatMarketValue,
+  });
+});
+
+/* --------------------------------------------------
+   Players (BEVEILIGD)
+-------------------------------------------------- */
+
+app.get("/players", requireAuth, async (req, res) => {
+  await loadData();
+
+  const q = (req.query.q as string) || "";
+  const starter = (req.query.starter as string) || "all";
+  const clubName = (req.query.clubName as string) || "";
+  const sort = (req.query.sort as string) || "name";
+  const order = (req.query.order as string) || "asc";
+
+  let list = [...playersCache];
+
+  if (q) {
+    list = list.filter(p =>
+      p.name.toLowerCase().includes(q.toLowerCase())
     );
+  }
 
-    res.render("home", {
-        totalPlayers,
-        totalClubs,
-        totalMarketValueEur,
-        formatMarketValue,
-    });
-});
-
-app.get("/players", async (req, res) => {
-    await loadData();
-
-    const q = (req.query.q as string) || "";
-    const sortParam = (req.query.sort as string) || "name";
-    const order = (req.query.order as string) === "desc" ? "desc" : "asc";
-
-    const starterParam = (req.query.starter as string) || "all";
-    const clubNameParam = (req.query.clubName as string) || "";
-
-    const allowedSort: Array<
-        "name" | "club" | "age" | "position" | "isStarter" | "marketValueEur" 
-        > = ["name", "club", "age", "position", "isStarter", "marketValueEur"];
-
-    const sort = allowedSort.includes(sortParam as any)
-        ? (sortParam as (typeof allowedSort)[number])
-        : "name";
-
-    const dir = order === "asc" ? 1 : -1;
-
-    let list = [...playersCache];
-
-    if (q) {
-        const needle = q.toLowerCase();
-        list = list.filter((p) => p.name.toLowerCase().includes(needle));
-    }
-
-    if (starterParam === "yes") {
-        list = list.filter((p) => p.isStarter);
-    } else if (starterParam === "no") {
-        list = list.filter((p) => !p.isStarter);
-    }
-
-    if (clubNameParam) {
-        const clubNeedle = clubNameParam.toLowerCase();
-        list = list.filter((p) =>
-            (p.club?.name || "").toLowerCase().includes(clubNeedle)
-        );
-    }
-
-    function compareStrings(a?: string, b?: string): number {
-        const sa = (a || "").toLowerCase();
-        const sb = (b || "").toLowerCase();
-        if (sa < sb) return -1 * dir;
-        if (sa > sb) return 1 * dir;
-        return 0;
-    }
-
-    list.sort((a, b) => {
-        switch (sort) {
-            case "club":
-                return compareStrings(a.club?.name, b.club?.name);
-            case "position":
-                return compareStrings(a.position, b.position);
-            case "isStarter": {
-                const av = a.isStarter ? 1 : 0;
-                const bv = b.isStarter ? 1 : 0;
-                return (av - bv) * dir;
-            }
-            case "marketValueEur":
-                return (a.marketValueEur - b.marketValueEur) * dir;
-            case "age":
-                return (a.age - b.age) * dir;
-            case "name":
-            default:
-                return compareStrings(a.name, b.name);
-        }
-    });
-
-    res.render("players-list", {
-        players: list,
-        q,
-        sort,
-        order,
-        starter: starterParam,
-        clubName: clubNameParam,
-        formatMarketValue,
-    });
-});
-
-app.get("/players/:id", async (req, res) => {
-    await loadData();
-
-    const id = req.params.id;
-    const player = playersCache.find((p) => p.id === id);
-
-    if (!player) return res.status(404).send("Player not found");
-
-    const club = clubsCache.find(
-        (c) =>
-            c.id.toLowerCase() === player.club.id.toLowerCase() ||
-            c.name.toLowerCase() === player.club.name.toLowerCase()
+  if (starter !== "all") {
+    list = list.filter(p =>
+      starter === "yes" ? p.isStarter : !p.isStarter
     );
+  }
 
-    res.render("player-detail", { player, club, formatMarketValue });
-});
-
-app.get("/players/:id/edit", async (req, res) => {
-    await loadData();
-
-    const id = req.params.id;
-    const player = playersCache.find(p => p.id === id);
-
-    if (!player) return res.status(404).send("Player not found");
-
-    res.render("player-edit", {
-        player,
-        clubs: clubsCache
-    });
-});
-
-app.post("/players/:id/edit", async (req, res) => {
-    const id = req.params.id;
-
-    const club = clubsCache.find(c => c.id === req.body.clubId);
-    if (!club) return res.status(400).send("Invalid club");
-
-    await playersCol.updateOne(
-        { id },
-        {
-            $set: {
-                name: req.body.name,
-                age: Number(req.body.age),
-                position: req.body.position,
-                marketValueEur: Number(req.body.marketValueEur),
-                isStarter: req.body.isStarter === "true",
-                club: {
-                    id: club.id,
-                    name: club.name
-                }
-            }
-        }
+  if (clubName) {
+    list = list.filter(p =>
+      p.club?.name.toLowerCase().includes(clubName.toLowerCase())
     );
+  }
 
-    playersCache = await playersCol.find().toArray();
+  list.sort((a: any, b: any) => {
+    const av = sort === "club" ? a.club?.name : a[sort];
+    const bv = sort === "club" ? b.club?.name : b[sort];
+    if (av < bv) return order === "asc" ? -1 : 1;
+    if (av > bv) return order === "asc" ? 1 : -1;
+    return 0;
+  });
 
-    res.redirect(`/players/${id}`);
+  res.render("players-list", {
+    page: "players",
+    players: list,
+    q,
+    starter,
+    clubName,
+    sort,
+    order,
+    formatMarketValue,
+  });
 });
 
+app.get("/players/:id", requireAuth, async (req, res) => {
+  await loadData();
 
+  const player = playersCache.find(p => p.id === req.params.id);
+  if (!player) return res.status(404).send("Player not found");
 
-app.get("/clubs", async (req, res) => {
-    await loadData();
+  const club = clubsCache.find(c => c.id === player.club.id);
 
-    const q = (req.query.q as string) || "";
-    const sortParam = (req.query.sort as string) || "name";
-    const order = (req.query.order as string) === "desc" ? "desc" : "asc";
-    const dir = order === "asc" ? 1 : -1;
+  res.render("player-detail", {
+    page: "players",
+    player,
+    club,
+    formatMarketValue,
+  });
+});
 
-    const allowedSort: Array<"name" | "foundedYear" | "country" | "stadium"> = [
-        "name",
-        "foundedYear",
-        "country",
-        "stadium",
-    ];
+/* --------------------------------------------------
+   Edit player (ADMIN)
+-------------------------------------------------- */
 
-    const sort = allowedSort.includes(sortParam as any)
-        ? (sortParam as (typeof allowedSort)[number])
-        : "name";
+app.get("/players/:id/edit", requireAdmin, async (req, res) => {
+  await loadData();
 
-    let list = [...clubsCache];
+  const player = playersCache.find(p => p.id === req.params.id);
+  if (!player) return res.status(404).send("Player not found");
 
-    if (q) {
-        const needle = q.toLowerCase();
-        list = list.filter((c) => c.name.toLowerCase().includes(needle));
+  res.render("player-edit", {
+    page: "players",
+    player,
+    clubs: clubsCache,
+  });
+});
+
+app.post("/players/:id/edit", requireAdmin, async (req, res) => {
+  const id = req.params.id;
+
+  const club = clubsCache.find(c => c.id === req.body.clubId);
+  if (!club) return res.status(400).send("Invalid club");
+
+  await playersCol.updateOne(
+    { id },
+    {
+      $set: {
+        name: req.body.name,
+        age: Number(req.body.age),
+        position: req.body.position,
+        marketValueEur: Number(req.body.marketValueEur),
+        isStarter: req.body.isStarter === "true",
+        club: { id: club.id, name: club.name },
+      },
     }
+  );
 
-    function cmp(a?: string | number, b?: string | number): number {
-        if (typeof a === "string" && typeof b === "string") {
-            const sa = a.toLowerCase();
-            const sb = b.toLowerCase();
-            if (sa < sb) return -1 * dir;
-            if (sa > sb) return 1 * dir;
-            return 0;
-        }
-        const av = Number(a ?? 0);
-        const bv = Number(b ?? 0);
-        return (av - bv) * dir;
-    }
-
-    list.sort((a, b) => {
-        switch (sort) {
-            case "foundedYear":
-                return cmp(a.foundedYear, b.foundedYear);
-            case "country":
-                return cmp(a.country, b.country);
-            case "stadium":
-                return cmp(a.stadium, b.stadium);
-            case "name":
-            default:
-                return cmp(a.name, b.name);
-        }
-    });
-
-    res.render("clubs-list", { clubs: list, q, sort, order });
+  playersCache = await playersCol.find().toArray();
+  res.redirect(`/players/${id}`);
 });
 
-app.get("/clubs/:id", async (req, res) => {
-    await loadData();
+/* --------------------------------------------------
+   Clubs (BEVEILIGD)
+-------------------------------------------------- */
 
-    const id = req.params.id;
-    const club = clubsCache.find((c) => c.id === id);
+app.get("/clubs", requireAuth, async (req, res) => {
+  await loadData();
 
-    if (!club) return res.status(404).send("Club not found");
+  const q = (req.query.q as string) || "";
+  const sort = (req.query.sort as string) || "name";
+  const order = (req.query.order as string) || "asc";
 
-    const clubPlayers = playersCache.filter(
-        (p) =>
-            p.club.id.toLowerCase() === club.id.toLowerCase() ||
-            p.club.name.toLowerCase() === club.name.toLowerCase()
+  let list = [...clubsCache];
+
+  if (q) {
+    list = list.filter(c =>
+      c.name.toLowerCase().includes(q.toLowerCase())
     );
+  }
 
-    const totalMarketValueEur = clubPlayers.reduce(
-        (sum, p) => sum + (p.marketValueEur || 0),
-        0
-    );
+  list.sort((a: any, b: any) => {
+    const av = a[sort];
+    const bv = b[sort];
+    if (av < bv) return order === "asc" ? -1 : 1;
+    if (av > bv) return order === "asc" ? 1 : -1;
+    return 0;
+  });
 
-    res.render("club-detail", {
-        club,
-        clubPlayers,
-        totalMarketValueEur,
-        formatMarketValue,
-    });
+  res.render("clubs-list", {
+    page: "clubs",
+    clubs: list,
+    q,
+    sort,
+    order,
+  });
 });
 
+app.get("/clubs/:id", requireAuth, async (req, res) => {
+  await loadData();
 
-const PORT = 3000;
+  const club = clubsCache.find(c => c.id === req.params.id);
+  if (!club) return res.status(404).send("Club not found");
+
+  const clubPlayers = playersCache.filter(p => p.club.id === club.id);
+  const totalMarketValueEur = clubPlayers.reduce(
+    (s, p) => s + (p.marketValueEur ?? 0),
+    0
+  );
+
+  res.render("club-detail", {
+    page: "clubs",
+    club,
+    clubPlayers,
+    totalMarketValueEur,
+    formatMarketValue,
+  });
+});
+
+/* --------------------------------------------------
+   Auth
+-------------------------------------------------- */
+
+app.get("/login", requireGuest, (req, res) => {
+  res.render("login", { error: null });
+});
+
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+
+  const user = await User.findOne({ username });
+  if (!user) return res.render("login", { error: "Onjuiste login" });
+
+  const match = await bcrypt.compare(password, user.passwordHash);
+  if (!match) return res.render("login", { error: "Onjuiste login" });
+
+  req.session.user = {
+    id: user._id.toString(),
+    username: user.username,
+    role: user.role,
+  };
+
+  res.redirect("/dashboard");
+});
+
+app.get("/register", requireGuest, (req, res) => {
+  res.render("register", { error: null });
+});
+
+app.post("/register", async (req, res) => {
+  const { username, password } = req.body;
+
+  if (await User.findOne({ username })) {
+    return res.render("register", { error: "Username bestaat al" });
+  }
+
+  const passwordHash = await bcrypt.hash(password, 10);
+  await User.create({ username, passwordHash, role: "USER" });
+
+  res.redirect("/login");
+});
+
+app.post("/logout", requireAuth, (req, res) => {
+  req.session.destroy(() => res.redirect("/login"));
+});
+
+/* --------------------------------------------------
+   Start server
+-------------------------------------------------- */
 
 async function start() {
-    try {
-        await client.connect();
-        db = client.db("transfermarkt");
-        playersCol = db.collection<Player>("players");
-        clubsCol = db.collection<Club>("clubs");
+  try {
+    await client.connect();
+    db = client.db("transfermarkt");
 
-        await seedDatabase();
+    playersCol = db.collection<Player>("players");
+    clubsCol = db.collection<Club>("clubs");
 
-        app.listen(PORT, () => {
-            console.log(`Server running at http://localhost:${PORT}`);
-        });
-    } catch (err) {
-        console.error("Failed to start server", err);
-        process.exit(1);
-    }
+    await mongoose.connect(MONGO_URI);
+    console.log("MongoDB & Mongoose connected");
+
+    await seedDatabase();
+    await seedDefaultUsers();
+
+    app.listen(PORT, () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+    });
+  } catch (err) {
+    console.error("Failed to start server", err);
+    process.exit(1);
+  }
 }
 
 start();
