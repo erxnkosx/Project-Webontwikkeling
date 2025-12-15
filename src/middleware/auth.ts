@@ -10,7 +10,7 @@ export function requireAuth(
 ) {
   if (!req.session.user) {
     return res.status(401).render("login", {
-      error: "Gelieve eerst in te loggen"
+      error: "Gelieve de juiste inloggegevens in te voeren!"
     });
   }
   next();

@@ -7,12 +7,17 @@
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
   margin: 0;
-  background:
-    radial-gradient(circle at 50% 25%, #1f3b70 0%, #0b1120 55%, #02040c 100%);
+  background: linear-gradient(
+    135deg,
+    #1f3b70 0%,
+    #0b1120 55%,
+    #02040c 100%
+  );
   background-attachment: fixed;
   background-size: cover;
   color: #e9edf5;
 }
+
 
 .page {
   max-width: 1200px;
@@ -21,6 +26,8 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  backdrop-filter: blur(2px);
+
 }
 
 .navbar {
@@ -896,7 +903,8 @@ a:hover {
     border: 1px solid rgba(99, 195, 255, 0.4);
     border-radius: 14px;
     padding: 30px;
-    max-width: 600px;
+    width: 100%;
+    max-width: 700px;
     margin: 40px auto;
     box-shadow:
         0 0 0 1px rgba(56, 189, 248, 0.12),
@@ -963,4 +971,163 @@ a:hover {
 
 .btn-cancel:hover {
     color: #ffb3b3;
+}
+
+
+/* =====================================================
+   MILESTONE 4 – LOGIN / REGISTER / LOGOUT
+   (toevoegen ONDERAAN style.css)
+===================================================== */
+
+/* ---------- LOGIN & REGISTER CARD (RESPONSIVE FIX) ---------- */
+.card1 {
+  width: 100%;
+  max-width: 420px;
+
+  margin: 80px auto;
+  padding: 26px 24px;
+
+  background: #050818;
+  border-radius: 16px;
+  border: 1px solid rgba(99, 195, 255, 0.45);
+
+  box-shadow:
+    0 0 0 1px rgba(56, 189, 248, 0.12),
+    0 22px 50px rgba(0, 0, 0, 0.75);
+}
+
+
+.card1 h1 {
+  margin: 0 0 18px;
+  text-align: center;
+  font-size: 26px;
+  color: #f4f7fb;
+}
+
+/* ---------- FORM ---------- */
+.card1 form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.card1 label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  color: #c7cfdd;
+}
+
+.card1 input {
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #0b1220;
+  border: 1px solid rgba(99, 195, 255, 0.4);
+  color: #f4f7fb;
+  font-size: 14px;
+}
+
+.card1 input::placeholder {
+  color: #94a3b8;
+}
+
+.card1 input:focus {
+  outline: none;
+  border-color: #63c3ff;
+  box-shadow: 0 0 0 1px #63c3ff;
+}
+
+/* ---------- SUBMIT BUTTON ---------- */
+.card1 button[type="submit"] {
+  margin-top: 8px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: none;
+
+  background: #63c3ff;
+  color: #050818;
+
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+
+  box-shadow: 0 10px 25px rgba(99, 195, 255, 0.35);
+}
+
+.card1 button[type="submit"]:hover {
+  background: #4ab4f7;
+}
+
+/* ---------- ERROR MESSAGE ---------- */
+.error {
+  margin-bottom: 12px;
+  padding: 8px 12px;
+
+  background: rgba(122, 36, 36, 0.85);
+  border: 1px solid rgba(239, 68, 68, 0.6);
+  border-radius: 10px;
+
+  color: #fecaca;
+  font-size: 13px;
+  text-align: center;
+}
+
+/* ---------- LOGIN / REGISTER LINKS ---------- */
+.card1 p {
+  margin-top: 40px;
+  font-size: 13px;
+  text-align: center;
+  color: #c7cfdd;
+}
+
+.card1 a {
+  color: #63c3ff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.card1 a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- FLOATING LOGOUT BUTTON ---------- */
+.floating-logout {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 999;
+}
+
+.floating-logout button {
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: none;
+
+  background: #ef4444;
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+}
+
+.floating-logout button:hover {
+  background: #dc2626;
+}
+@media (max-width: 480px) {
+  .card1 {
+    padding: 22px 18px;
+    margin: 40px 12px;
+  }
+
+  .card1 h1 {
+    font-size: 22px;
+  }
 }
