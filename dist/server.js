@@ -4,7 +4,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const mongodb_1 = require("mongodb");
+const fs_1 = __importDefault(require("fs"));
+const express_session_1 = __importDefault(require("express-session"));
+const connect_mongo_1 = __importDefault(require("connect-mongo"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
+const mongoose_1 = __importDefault(require("mongoose"));
+const User_1 = require("./models/User");
+const seedUsers_1 = require("./seed/seedUsers");
+const auth_1 = require("./middleware/auth");
 const app = (0, express_1.default)();
+const PORT = 3000;
 function formatMarketValue(value) {
     if (value >= 1000000)
         return `${Math.round(value / 1000000)} million`;
@@ -12,184 +22,254 @@ function formatMarketValue(value) {
         return `${Math.round(value / 1000)} k`;
     return value.toString();
 }
+app.use(express_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.static("public"));
 app.set("view engine", "ejs");
 app.set("views", "src/views");
-let players = [];
-let clubs = [];
-async function loadData() {
-    if (players.length && clubs.length)
-        return;
-    const playersUrl = "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/src/data/players.json";
-    const clubsUrl = "https://raw.githubusercontent.com/erxnkosx/Project-Webontwikkeling/main/src/data/clubs.json";
-    const [playersRes, clubsRes] = await Promise.all([
-        fetch(playersUrl),
-        fetch(clubsUrl),
-    ]);
-    if (!playersRes.ok)
-        throw new Error("Failed to fetch players.json");
-    if (!clubsRes.ok)
-        throw new Error("Failed to fetch clubs.json");
-    players = (await playersRes.json());
-    clubs = (await clubsRes.json());
+const MONGO_URI = process.env.MONGO_URI ||
+    "mongodb+srv://user:user1905@projecttransfermarkt.d6wldo9.mongodb.net/?appName=ProjectTransfermarkt";
+const client = new mongodb_1.MongoClient(MONGO_URI);
+let db;
+let playersCol;
+let clubsCol;
+app.use((0, express_session_1.default)({
+    secret: process.env.SESSION_SECRET || "dev-secret",
+    resave: false,
+    saveUninitialized: false,
+    store: connect_mongo_1.default.create({
+        mongoUrl: MONGO_URI,
+        collectionName: "sessions",
+    }),
+    cookie: {
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24,
+    },
+}));
+app.use((req, res, next) => {
+    res.locals.user = req.session.user;
+    next();
+});
+async function seedDatabase() {
+    if ((await playersCol.countDocuments()) === 0) {
+        const players = JSON.parse(fs_1.default.readFileSync("src/data/players.json", "utf8"));
+        await playersCol.insertMany(players);
+        console.log("Players seeded");
+    }
+    if ((await clubsCol.countDocuments()) === 0) {
+        const clubs = JSON.parse(fs_1.default.readFileSync("src/data/clubs.json", "utf8"));
+        await clubsCol.insertMany(clubs);
+        console.log("Clubs seeded");
+    }
 }
-app.get("/", async (_req, res) => {
+let playersCache = [];
+let clubsCache = [];
+async function loadData() {
+    if (!playersCache.length) {
+        playersCache = await playersCol.find().toArray();
+    }
+    if (!clubsCache.length) {
+        clubsCache = await clubsCol.find().toArray();
+    }
+}
+app.get("/", (req, res) => {
+    if (!req.session.user) {
+        const showError = req.query.auth === "required";
+        return res.render("home", {
+            page: "home",
+            showAuthError: showError,
+            totalPlayers: playersCache.length,
+            totalClubs: clubsCache.length,
+            totalMarketValueEur: playersCache.reduce((s, p) => s + (p.marketValueEur ?? 0), 0),
+            formatMarketValue,
+        });
+    }
+    res.redirect("/dashboard");
+});
+app.get("/dashboard", auth_1.requireAuth, async (req, res) => {
     await loadData();
-    const totalPlayers = players.length;
-    const totalClubs = clubs.length;
-    const totalMarketValueEur = players.reduce((sum, p) => sum + (p.marketValueEur ?? 0), 0);
     res.render("home", {
-        totalPlayers,
-        totalClubs,
-        totalMarketValueEur,
+        page: "home",
+        totalPlayers: playersCache.length,
+        totalClubs: clubsCache.length,
+        totalMarketValueEur: playersCache.reduce((s, p) => s + (p.marketValueEur ?? 0), 0),
         formatMarketValue,
     });
 });
-app.get("/players", async (req, res) => {
+app.get("/players", auth_1.requireAuth, async (req, res) => {
     await loadData();
     const q = req.query.q || "";
-    const sortParam = req.query.sort || "name";
-    const order = req.query.order === "desc" ? "desc" : "asc";
-    const starterParam = req.query.starter || "all";
-    const clubNameParam = req.query.clubName || "";
-    const allowedSort = ["name", "club", "age", "position", "isStarter", "marketValueEur"];
-    const sort = allowedSort.includes(sortParam)
-        ? sortParam
-        : "name";
-    const dir = order === "asc" ? 1 : -1;
-    let list = [...players];
-    // search by name
+    const starter = req.query.starter || "all";
+    const clubName = req.query.clubName || "";
+    const sort = req.query.sort || "name";
+    const order = req.query.order || "asc";
+    let list = [...playersCache];
     if (q) {
-        const needle = q.toLowerCase();
-        list = list.filter((p) => p.name.toLowerCase().includes(needle));
+        list = list.filter(p => p.name.toLowerCase().includes(q.toLowerCase()));
     }
-    // filter by starter
-    if (starterParam === "yes") {
-        list = list.filter((p) => p.isStarter);
+    if (starter !== "all") {
+        list = list.filter(p => starter === "yes" ? p.isStarter : !p.isStarter);
     }
-    else if (starterParam === "no") {
-        list = list.filter((p) => !p.isStarter);
-    }
-    // search by club
-    if (clubNameParam) {
-        const clubNeedle = clubNameParam.toLowerCase();
-        list = list.filter((p) => (p.club?.name || "").toLowerCase().includes(clubNeedle));
-    }
-    function compareStrings(a, b) {
-        const sa = (a || "").toLowerCase();
-        const sb = (b || "").toLowerCase();
-        if (sa < sb)
-            return -1 * dir;
-        if (sa > sb)
-            return 1 * dir;
-        return 0;
+    if (clubName) {
+        list = list.filter(p => p.club?.name.toLowerCase().includes(clubName.toLowerCase()));
     }
     list.sort((a, b) => {
-        switch (sort) {
-            case "club":
-                return compareStrings(a.club?.name, b.club?.name);
-            case "position":
-                return compareStrings(a.position, b.position);
-            case "isStarter": {
-                const av = a.isStarter ? 1 : 0;
-                const bv = b.isStarter ? 1 : 0;
-                return (av - bv) * dir;
-            }
-            case "marketValueEur":
-                return (a.marketValueEur - b.marketValueEur) * dir;
-            case "age":
-                return (a.age - b.age) * dir;
-            case "name":
-            default:
-                return compareStrings(a.name, b.name);
-        }
+        const av = sort === "club" ? a.club?.name : a[sort];
+        const bv = sort === "club" ? b.club?.name : b[sort];
+        if (av < bv)
+            return order === "asc" ? -1 : 1;
+        if (av > bv)
+            return order === "asc" ? 1 : -1;
+        return 0;
     });
     res.render("players-list", {
+        page: "players",
         players: list,
+        q,
+        starter,
+        clubName,
+        sort,
+        order,
+        formatMarketValue,
+    });
+});
+app.get("/players/:id", auth_1.requireAuth, async (req, res) => {
+    await loadData();
+    const player = playersCache.find(p => p.id === req.params.id);
+    if (!player)
+        return res.status(404).send("Player not found");
+    const club = clubsCache.find(c => c.id === player.club.id);
+    res.render("player-detail", {
+        page: "players",
+        player,
+        club,
+        formatMarketValue,
+    });
+});
+app.get("/players/:id/edit", auth_1.requireAdmin, async (req, res) => {
+    await loadData();
+    const player = playersCache.find(p => p.id === req.params.id);
+    if (!player)
+        return res.status(404).send("Player not found");
+    res.render("player-edit", {
+        page: "players",
+        player,
+        clubs: clubsCache,
+    });
+});
+app.post("/players/:id/edit", auth_1.requireAdmin, async (req, res) => {
+    const id = req.params.id;
+    const club = clubsCache.find(c => c.id === req.body.clubId);
+    if (!club)
+        return res.status(400).send("Invalid club");
+    await playersCol.updateOne({ id }, {
+        $set: {
+            name: req.body.name,
+            age: Number(req.body.age),
+            position: req.body.position,
+            marketValueEur: Number(req.body.marketValueEur),
+            isStarter: req.body.isStarter === "true",
+            club: { id: club.id, name: club.name },
+        },
+    });
+    playersCache = await playersCol.find().toArray();
+    res.redirect(`/players/${id}`);
+});
+app.get("/clubs", auth_1.requireAuth, async (req, res) => {
+    await loadData();
+    const q = req.query.q || "";
+    const sort = req.query.sort || "name";
+    const order = req.query.order || "asc";
+    let list = [...clubsCache];
+    if (q) {
+        list = list.filter(c => c.name.toLowerCase().includes(q.toLowerCase()));
+    }
+    list.sort((a, b) => {
+        const av = a[sort];
+        const bv = b[sort];
+        if (av < bv)
+            return order === "asc" ? -1 : 1;
+        if (av > bv)
+            return order === "asc" ? 1 : -1;
+        return 0;
+    });
+    res.render("clubs-list", {
+        page: "clubs",
+        clubs: list,
         q,
         sort,
         order,
-        starter: starterParam,
-        clubName: clubNameParam,
-        formatMarketValue,
     });
 });
-app.get("/players/:id", async (req, res) => {
+app.get("/clubs/:id", auth_1.requireAuth, async (req, res) => {
     await loadData();
-    const id = req.params.id;
-    const player = players.find((p) => p.id === id);
-    if (!player)
-        return res.status(404).send("Player not found");
-    const club = clubs.find((c) => c.id.toLowerCase() === player.club.id.toLowerCase() ||
-        c.name.toLowerCase() === player.club.name.toLowerCase());
-    res.render("player-detail", { player, club, formatMarketValue });
-});
-app.get("/clubs", async (req, res) => {
-    await loadData();
-    const q = req.query.q || "";
-    const sortParam = req.query.sort || "name";
-    const order = req.query.order === "desc" ? "desc" : "asc";
-    const dir = order === "asc" ? 1 : -1;
-    const allowedSort = [
-        "name",
-        "foundedYear",
-        "country",
-        "stadium",
-    ];
-    const sort = allowedSort.includes(sortParam)
-        ? sortParam
-        : "name";
-    let list = [...clubs];
-    if (q) {
-        const needle = q.toLowerCase();
-        list = list.filter((c) => c.name.toLowerCase().includes(needle));
-    }
-    function cmp(a, b) {
-        if (typeof a === "string" && typeof b === "string") {
-            const sa = a.toLowerCase();
-            const sb = b.toLowerCase();
-            if (sa < sb)
-                return -1 * dir;
-            if (sa > sb)
-                return 1 * dir;
-            return 0;
-        }
-        const na = Number(a ?? 0);
-        const nb = Number(b ?? 0);
-        return (na - nb) * dir;
-    }
-    list.sort((a, b) => {
-        switch (sort) {
-            case "foundedYear":
-                return cmp(a.foundedYear, b.foundedYear);
-            case "country":
-                return cmp(a.country, b.country);
-            case "stadium":
-                return cmp(a.stadium, b.stadium);
-            case "name":
-            default:
-                return cmp(a.name, b.name);
-        }
-    });
-    res.render("clubs-list", { clubs: list, q, sort, order });
-});
-app.get("/clubs/:id", async (req, res) => {
-    await loadData();
-    const id = req.params.id;
-    const club = clubs.find((c) => c.id === id);
+    const club = clubsCache.find(c => c.id === req.params.id);
     if (!club)
         return res.status(404).send("Club not found");
-    const clubPlayers = players.filter((p) => p.club.id.toLowerCase() === club.id.toLowerCase() ||
-        p.club.name.toLowerCase() === club.name.toLowerCase());
-    const totalMarketValueEur = clubPlayers.reduce((sum, p) => sum + (p.marketValueEur || 0), 0);
+    const clubPlayers = playersCache.filter(p => p.club.id === club.id);
+    const totalMarketValueEur = clubPlayers.reduce((s, p) => s + (p.marketValueEur ?? 0), 0);
     res.render("club-detail", {
+        page: "clubs",
         club,
         clubPlayers,
         totalMarketValueEur,
         formatMarketValue,
     });
 });
-const PORT = 3000;
-app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
+app.get("/login", auth_1.requireGuest, (req, res) => {
+    const showAuthError = req.query.auth === "required";
+    res.render("login", {
+        error: showAuthError
+            ? "Je moet eerst inloggen om spelers of clubs te bekijken."
+            : null
+    });
 });
+app.post("/login", async (req, res) => {
+    const { username, password } = req.body;
+    const user = await User_1.User.findOne({ username });
+    if (!user)
+        return res.render("login", { error: "Onjuiste login" });
+    const match = await bcrypt_1.default.compare(password, user.passwordHash);
+    if (!match)
+        return res.render("login", { error: "Onjuiste login" });
+    req.session.user = {
+        id: user._id.toString(),
+        username: user.username,
+        role: user.role,
+    };
+    res.redirect("/dashboard");
+});
+app.get("/register", auth_1.requireGuest, (req, res) => {
+    res.render("register", { error: null });
+});
+app.post("/register", async (req, res) => {
+    const { username, password } = req.body;
+    if (await User_1.User.findOne({ username })) {
+        return res.render("register", { error: "Username bestaat al" });
+    }
+    const passwordHash = await bcrypt_1.default.hash(password, 10);
+    await User_1.User.create({ username, passwordHash, role: "USER" });
+    res.redirect("/login");
+});
+app.post("/logout", auth_1.requireAuth, (req, res) => {
+    req.session.destroy(() => res.redirect("/login"));
+});
+async function start() {
+    try {
+        await client.connect();
+        db = client.db("transfermarkt");
+        playersCol = db.collection("players");
+        clubsCol = db.collection("clubs");
+        await mongoose_1.default.connect(MONGO_URI);
+        console.log("MongoDB & Mongoose connected");
+        await seedDatabase();
+        await (0, seedUsers_1.seedDefaultUsers)();
+        app.listen(PORT, () => {
+            console.log(`Server running on http://localhost:${PORT}`);
+        });
+    }
+    catch (err) {
+        console.error("Failed to start server", err);
+        process.exit(1);
+    }
+}
+start();

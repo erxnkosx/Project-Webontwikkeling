@@ -15,29 +15,17 @@ import { requireAuth, requireAdmin, requireGuest } from "./middleware/auth";
 const app = express();
 const PORT = 3000;
 
-/* --------------------------------------------------
-   Helpers
--------------------------------------------------- */
-
 function formatMarketValue(value: number): string {
   if (value >= 1_000_000) return `${Math.round(value / 1_000_000)} million`;
   if (value >= 1_000) return `${Math.round(value / 1_000)} k`;
   return value.toString();
 }
 
-/* --------------------------------------------------
-   App config
--------------------------------------------------- */
-
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 app.set("view engine", "ejs");
 app.set("views", "src/views");
-
-/* --------------------------------------------------
-   MongoDB config
--------------------------------------------------- */
 
 const MONGO_URI =
   process.env.MONGO_URI ||
@@ -48,10 +36,6 @@ const client = new MongoClient(MONGO_URI);
 let db: Db;
 let playersCol: Collection<Player>;
 let clubsCol: Collection<Club>;
-
-/* --------------------------------------------------
-   Sessions (MOET vóór routes)
--------------------------------------------------- */
 
 app.use(
   session({
@@ -69,18 +53,10 @@ app.use(
   })
 );
 
-/* --------------------------------------------------
-   res.locals (user beschikbaar in alle views)
--------------------------------------------------- */
-
 app.use((req, res, next) => {
   res.locals.user = req.session.user;
   next();
 });
-
-/* --------------------------------------------------
-   Seed players & clubs
--------------------------------------------------- */
 
 async function seedDatabase() {
   if ((await playersCol.countDocuments()) === 0) {
@@ -100,10 +76,6 @@ async function seedDatabase() {
   }
 }
 
-/* --------------------------------------------------
-   Cache
--------------------------------------------------- */
-
 let playersCache: Player[] = [];
 let clubsCache: Club[] = [];
 
@@ -116,14 +88,23 @@ async function loadData() {
   }
 }
 
-/* --------------------------------------------------
-   Home / Dashboard
--------------------------------------------------- */
-
 app.get("/", (req, res) => {
   if (!req.session.user) {
-    return res.redirect("/login");
+    const showError = req.query.auth === "required";
+
+    return res.render("home", {
+      page: "home",
+      showAuthError: showError,
+      totalPlayers: playersCache.length,
+      totalClubs: clubsCache.length,
+      totalMarketValueEur: playersCache.reduce(
+        (s, p) => s + (p.marketValueEur ?? 0),
+        0
+      ),
+      formatMarketValue,
+    });
   }
+
   res.redirect("/dashboard");
 });
 
@@ -141,10 +122,6 @@ app.get("/dashboard", requireAuth, async (req, res) => {
     formatMarketValue,
   });
 });
-
-/* --------------------------------------------------
-   Players (BEVEILIGD)
--------------------------------------------------- */
 
 app.get("/players", requireAuth, async (req, res) => {
   await loadData();
@@ -211,10 +188,6 @@ app.get("/players/:id", requireAuth, async (req, res) => {
   });
 });
 
-/* --------------------------------------------------
-   Edit player (ADMIN)
--------------------------------------------------- */
-
 app.get("/players/:id/edit", requireAdmin, async (req, res) => {
   await loadData();
 
@@ -251,10 +224,6 @@ app.post("/players/:id/edit", requireAdmin, async (req, res) => {
   playersCache = await playersCol.find().toArray();
   res.redirect(`/players/${id}`);
 });
-
-/* --------------------------------------------------
-   Clubs (BEVEILIGD)
--------------------------------------------------- */
 
 app.get("/clubs", requireAuth, async (req, res) => {
   await loadData();
@@ -309,12 +278,14 @@ app.get("/clubs/:id", requireAuth, async (req, res) => {
   });
 });
 
-/* --------------------------------------------------
-   Auth
--------------------------------------------------- */
-
 app.get("/login", requireGuest, (req, res) => {
-  res.render("login", { error: null });
+  const showAuthError = req.query.auth === "required";
+
+  res.render("login", {
+    error: showAuthError
+      ? "Je moet eerst inloggen om spelers of clubs te bekijken."
+      : null
+  });
 });
 
 app.post("/login", async (req, res) => {
@@ -356,10 +327,6 @@ app.post("/logout", requireAuth, (req, res) => {
   req.session.destroy(() => res.redirect("/login"));
 });
 
-/* --------------------------------------------------
-   Start server
--------------------------------------------------- */
-
 async function start() {
   try {
     await client.connect();
@@ -382,5 +349,4 @@ async function start() {
     process.exit(1);
   }
 }
-
 start();

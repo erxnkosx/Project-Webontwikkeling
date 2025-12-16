@@ -14,10 +14,19 @@
       in a clean, modern dashboard.
     </p>
 
+    <% if (!user && showAuthError) { %>
+      <div class="home-auth-error">
+         Je moet eerst inloggen om spelers of clubs te bekijken.
+      </div>
+    <% } %>
+
+
+
     <div class="home-cta">
       <a class="btn-primary" href="/players">Browse players</a>
       <a class="btn-secondary" href="/clubs">View clubs</a>
     </div>
+
   </div>
 
   <div class="home-hero-right">

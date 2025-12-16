@@ -4,7 +4,7 @@
   "description": "Projectopdracht",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node src/app.ts",
+    "start": "node dist/server.js",
     "build": "tsc",
     "start:js": "node dist/app.js",
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts"

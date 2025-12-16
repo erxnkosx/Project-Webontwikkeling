@@ -7,14 +7,16 @@
     <% } %>
   </div>
 
-  <nav class="nav-links">
-    <% if (user) { %>
-      <a href="/dashboard">Home</a>
-      <a href="/players">Players</a>
-      <a href="/clubs">Clubs</a>
-    <% } else { %>
-      <a href="/login">Login</a>
-      <a href="/register">Register</a>
-    <% } %>
-  </nav>
+<nav class="nav-links">
+  <a href="/">Home</a>
+
+  <% if (user) { %>
+    <a href="/players">Players</a>
+    <a href="/clubs">Clubs</a>
+  <% } else { %>
+    <a href="/login">Login</a>
+    <a href="/register">Register</a>
+  <% } %>
+</nav>
+
 </header>
